@@ -1,0 +1,11 @@
+/.github/ISSUE_TEMPLATE/
+/.idea
+/.vscode
+*.log
+/node_modules
+
+/backend/runtime
+/backend/vendor
+/backend.env
+/backend/tests/tmp
+/backend/tests/.phpunit.result.cache
