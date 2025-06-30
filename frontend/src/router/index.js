@@ -1,0 +1,37 @@
+import { createRouter, createWebHistory } from 'vue-router'
+
+const routes = [
+  {
+    path: '/',
+    name: 'HomeView',
+    component: () => import('../views/Home.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/login',
+    name: 'LoginView',
+    component: () => import('../views/Login.vue'),
+    meta: { hideLayout: true },
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/',
+  },
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('token')
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login')
+  }
+  else {
+    next()
+  }
+})
+
+export default router
