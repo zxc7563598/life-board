@@ -26,6 +26,7 @@
     "@unocss/reset": "^66.3.2",
     "@vitejs/plugin-vue": "^6.0.0",
     "axios": "^1.10.0",
+    "bowser": "^2.11.0",
     "crypto-js": "^4.2.0",
     "eslint": "^9.30.0",
     "eslint-config-prettier": "^10.1.5",
