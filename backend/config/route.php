@@ -14,6 +14,16 @@
  */
 
 use Webman\Route;
+use app\controller;
+
+Route::group('/api', function () {
+    Route::post('/auth/login', [controller\AuthController::class, 'login'])->name('[执行登录]');
+    Route::post('/auth/refresh', [controller\AuthController::class, 'refreshAll'])->name('[刷新token]');
+    Route::post('/auth/logout', [controller\AuthController::class, 'logout'])->name('[退出登录]');
+})->middleware([
+    app\middleware\AccessMiddleware::class,
+    app\middleware\LangMiddleware::class
+]);
 
 // 允许所有的options请求
 Route::options('[{path:.+}]', function () {
