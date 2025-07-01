@@ -32,12 +32,15 @@ class TokenService
     /**
      * 解析并验证 JWT 字符串
      *
-     * @param string $token JWT 字符串
+     * @param string|null $token JWT 字符串
      * 
      * @return array|null 解码后的 payload，失败或过期返回 null
      */
-    public static function parseToken(string $token): ?array
+    public static function parseToken(?string $token): ?array
     {
+        if (empty($token)) {
+            return null;
+        }
         [$h, $p, $s] = explode('.', $token);
         if (self::sign("$h.$p") !== $s) return null;
 
