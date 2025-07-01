@@ -17,6 +17,7 @@ use Webman\Route;
 use app\controller;
 
 Route::group('/api', function () {
+    Route::post('/auth/register', [controller\AuthController::class, 'register'])->name('[执行注册]');
     Route::post('/auth/login', [controller\AuthController::class, 'login'])->name('[执行登录]');
     Route::post('/auth/refresh', [controller\AuthController::class, 'refreshAll'])->name('[刷新token]');
     Route::post('/auth/logout', [controller\AuthController::class, 'logout'])->name('[退出登录]');
@@ -33,7 +34,7 @@ Route::options('[{path:.+}]', function () {
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers' => 'Content-Type, X-Auth-Token, Accept-Language',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
         ]);
 });
 
