@@ -28,7 +28,7 @@ class AuthMiddleware
             return fail($request, 900001);
         }
         // 验证签名
-        if (md5(config('app')['sign_key'] . $param['timestamp']) != $param['sign']) {
+        if (md5(config('app')['key'] . $param['timestamp']) != $param['sign']) {
             return fail($request, 900002);
         }
         // 验证时间是否正确
@@ -46,6 +46,7 @@ class AuthMiddleware
         $request->access_token = null;
         // 登录验证，忽略特定路由
         $whitelisting = [
+            '/api/auth/register',
             '/api/auth/login',
             '/api/auth/refresh',
         ];
