@@ -5,7 +5,7 @@ namespace resource\enums\RefreshTokensEnums;
 /**
  * 是否销毁
  */
-enum Enable: int
+enum Revoked: int
 {
     case No = 0;
     case Yes = 1;
