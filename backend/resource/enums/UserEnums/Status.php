@@ -5,7 +5,7 @@ namespace resource\enums\UserEnums;
 /**
  * 是否启用
  */
-enum Enable: int
+enum Status: int
 {
     case Disable = 0;
     case Enable = 1;
