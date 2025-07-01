@@ -46,6 +46,7 @@ class AuthMiddleware
         $request->access_token = null;
         // 登录验证，忽略特定路由
         $whitelisting = [
+            '/api/auth/register',
             '/api/auth/login',
             '/api/auth/refresh',
         ];
