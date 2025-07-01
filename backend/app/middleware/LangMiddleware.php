@@ -10,7 +10,7 @@ class LangMiddleware implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler): Response
     {
-        locale($request->header('Accept-Language') ?? null);
+        locale($request->header('Accept-Language') ?? 'zh');
         return $handler($request);
     }
 }
