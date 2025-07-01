@@ -7,12 +7,46 @@ use app\model\User;
 use app\service\AuthService;
 use support\Request;
 use app\service\TokenService;
+use InvalidArgumentException;
+use Illuminate\Database\Eloquent\InvalidCastException;
 use resource\enums\UserEnums;
 use resource\enums\RefreshTokensEnums;
 use support\Response;
 
 class AuthController
 {
+
+    /**
+     * 执行注册
+     * 
+     * @param string $nickname 昵称
+     * @param string $username 账号
+     * @param string $password 密码
+     * 
+     * @return Response 
+     */
+    public function register(Request $request)
+    {
+        // 获取参数
+        $nickname = $request->data['nickname'];
+        $username = $request->data['username'];
+        $password = $request->data['password'];
+        // 获取数据
+        $user = User::where('username', $username)->first();
+        if (!empty($user)) {
+            return fail(800009);
+        }
+        // 进行注册
+        $user = new User();
+        $user->nickname = $nickname;
+        $user->username = $username;
+        $user->password = $password;
+        $user->status = UserEnums\Status::Enable->value;
+        $user->save();
+        // 返回数据
+        return success($request, []);
+    }
+
     /**
      * 执行登录
      * 
