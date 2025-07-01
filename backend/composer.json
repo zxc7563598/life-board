@@ -38,7 +38,8 @@
     "symfony/translation": "^7.3",
     "vlucas/phpdotenv": "^5.6",
     "revolt/event-loop": "^1.0",
-    "hejunjie/error-log": "^1.0"
+    "hejunjie/error-log": "^1.0",
+    "hejunjie/ip138": "^1.0"
   },
   "suggest": {
     "ext-event": "For better performance. "

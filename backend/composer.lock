@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29384151647cb4abdd085d4bcc27e6b5",
+    "content-hash": "e01d33b6a6dd094936d86365e242f1e6",
     "packages": [
         {
             "name": "brick/math",
@@ -1133,6 +1133,46 @@
                 "source": "https://github.com/zxc7563598/php-error-log/tree/v1.0.2"
             },
             "time": "2025-05-27T02:51:12+00:00"
+        },
+        {
+            "name": "hejunjie/ip138",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zxc7563598/php-ip138.git",
+                "reference": "d4dcc5982cd7fd281b4c85b175c3dc3e32ef30c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zxc7563598/php-ip138/zipball/d4dcc5982cd7fd281b4c85b175c3dc3e32ef30c3",
+                "reference": "d4dcc5982cd7fd281b4c85b175c3dc3e32ef30c3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hejunjie\\Ip138\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "何俊杰",
+                    "email": "junjie.he.925@gmail.com"
+                }
+            ],
+            "description": "PHP 封装的 IP138 API SDK, 简化 IP、手机号归属地、天气查询信息接口以及二维码生成接口调用 | PHP SDK for IP138 API integration: IP lookup, mobile attribution, weather, QR code and more.",
+            "support": {
+                "issues": "https://github.com/zxc7563598/php-ip138/issues",
+                "source": "https://github.com/zxc7563598/php-ip138/tree/v1.0.0"
+            },
+            "time": "2025-06-16T05:01:55+00:00"
         },
         {
             "name": "illuminate/bus",
