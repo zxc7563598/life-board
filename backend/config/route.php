@@ -22,7 +22,8 @@ Route::group('/api', function () {
     Route::post('/auth/logout', [controller\AuthController::class, 'logout'])->name('[退出登录]');
 })->middleware([
     app\middleware\AccessMiddleware::class,
-    app\middleware\LangMiddleware::class
+    app\middleware\LangMiddleware::class,
+    app\middleware\AuthMiddleware::class
 ]);
 
 // 允许所有的options请求
