@@ -2,12 +2,14 @@
   <div class="min-h-100% bg-[#f9fafb] px-4 py-4 dark:bg-[#121212]">
     <div class="flex flex-wrap gap-4">
       <ProfileCard :data="profile.profile_card" class="opacity-0 duration-1500" :class="{ 'opacity-100': show[0] }" />
+      <BillmailConfig :data="profile.billmail_config" class="opacity-0 duration-1500" :class="{ 'opacity-100': show[1] }" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import BillmailConfig from '@/components/Profile/BillmailConfig.vue'
 import ProfileCard from '@/components/Profile/ProfileCard.vue'
 import { request } from '@/utils/http/request'
 

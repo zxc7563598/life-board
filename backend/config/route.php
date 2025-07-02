@@ -22,6 +22,7 @@ Route::group('/api', function () {
     Route::post('/auth/refresh', [controller\AuthController::class, 'refreshAll'])->name('[刷新token]');
     Route::post('/auth/profile', [controller\AuthController::class, 'getProfile'])->name('[获取用户个人信息]');
     Route::post('/auth/set-profile', [controller\AuthController::class, 'setProfile'])->name('[变更用户个人信息]');
+    Route::post('/auth/set-billmail-config', [controller\AuthController::class, 'setBillmailConfig'])->name('[变更账单监听邮箱配置]');
     Route::post('/auth/logout', [controller\AuthController::class, 'logout'])->name('[退出登录]');
 })->middleware([
     app\middleware\AccessMiddleware::class,
