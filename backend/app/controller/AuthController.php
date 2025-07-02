@@ -7,6 +7,8 @@ use app\model\User;
 use app\service\AuthService;
 use support\Request;
 use app\service\TokenService;
+use InvalidArgumentException;
+use Illuminate\Database\Eloquent\InvalidCastException;
 use resource\enums\UserEnums;
 use resource\enums\RefreshTokensEnums;
 use support\Response;
@@ -153,15 +155,39 @@ class AuthController
         $user = User::where('id', $request->uid)->first([
             'nickname' => 'nickname',
             'username' => 'username',
+            'mail_host' => 'mail_host',
+            'mail_username' => 'mail_username',
+            'mail_password' => 'mail_password',
         ]);
         if (empty($user)) {
             return fail($request, 800010);
         }
+        // 获取邮件服务提供商(IMAP 邮件服务器地址一般是稳定且长期不变的，因此直接硬编码即可) {imap.gmail.com:993/imap/ssl}INBOX
+        $mail_providers = [
+            ['label' => 'Gmail', 'value' => 'imap.gmail.com:993/imap/ssl'],
+            ['label' => 'Yahoo', 'value' => 'imap.mail.yahoo.com:993/imap/ssl'],
+            ['label' => 'iCloud', 'value' => 'imap.mail.me.com:993/imap/ssl'],
+            ['label' => 'Outlook', 'value' => 'imap-mail.outlook.com:993/imap/ssl'],
+            ['label' => 'QQ', 'value' => 'imap.qq.com:993/imap/ssl'],
+            ['label' => '163', 'value' => 'imap.163.com:993/imap/ssl'],
+            ['label' => '新浪', 'value' => 'imap.sina.com.cn:993/imap/ssl'],
+            ['label' => '阿里云', 'value' => 'imap.aliyun.com:993/imap/ssl'],
+            ['label' => 'Zoho', 'value' => 'imap.zoho.com:993/imap/ssl'],
+            ['label' => 'Yandex', 'value' => 'imap.yandex.com:993/imap/ssl'],
+            ['label' => 'Fastmail', 'value' => 'imap.fastmail.com:993/imap/ssl'],
+            ['label' => '其他', 'value' => '']
+        ];
         // 返回数据
         return success($request, [
             'profile_card' => [
                 'nickname' => $user->nickname,
                 'username' => $user->username,
+            ],
+            'billmail_config' => [
+                'mail_providers' => $mail_providers,
+                'mail_host' => $user->mail_host,
+                'mail_username' => $user->mail_username,
+                'mail_password' => $user->mail_password,
             ]
         ]);
     }
@@ -201,6 +227,34 @@ class AuthController
         return success($request, [
             'login' => $login
         ]);
+    }
+
+    /**
+     * 变更账单监听邮箱配置
+     * 
+     * @param string $mail_host 服务地址
+     * @param string $mail_username 邮箱账号
+     * @param string $mail_password 密码或授权码
+     * 
+     * @return Response 
+     */
+    public function setBillmailConfig(Request $request): Response
+    {
+        // 获取参数
+        $mail_host = $request->data['mail_host'];
+        $mail_username = $request->data['mail_username'];
+        $mail_password = $request->data['mail_password'];
+        // 获取数据
+        $user = User::where('id', $request->uid)->first();
+        if (empty($user)) {
+            return fail($request, 800010);
+        }
+        $user->mail_host = $mail_host;
+        $user->mail_username = $mail_username;
+        $user->mail_password = $mail_password;
+        $user->save();
+        // 返回数据
+        return success($request, []);
     }
 
     /**
