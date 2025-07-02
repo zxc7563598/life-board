@@ -26,9 +26,9 @@ import AppHeader from '@/components/AppHeader.vue'
 import AppMenu from '@/components/AppMenu.vue'
 import { getSystemTheme, getSystemThemeOverrides, watchSystemTheme, watchSystemThemeOverrides } from './utils/theme'
 
+// 初始化获取主题信息
 const theme = ref(getSystemTheme())
 const themeOverrides = ref(getSystemThemeOverrides())
-
 const isDark = ref(false)
 if (theme.value.name === 'dark') {
   isDark.value = true
@@ -36,8 +36,8 @@ if (theme.value.name === 'dark') {
 else {
   isDark.value = false
 }
-console.warn('初始化', isDark.value)
 
+// 监听主题变更
 let unwatchTheme
 let unwatchThemeOverrides
 onMounted(() => {
@@ -49,9 +49,7 @@ onMounted(() => {
     else {
       isDark.value = false
     }
-    console.warn('监听', isDark.value)
   })
-
   unwatchThemeOverrides = watchSystemThemeOverrides((newTheme) => {
     themeOverrides.value = newTheme
   })
