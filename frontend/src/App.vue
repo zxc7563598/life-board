@@ -5,11 +5,11 @@
         <div class="h-100vh flex flex-col">
           <AppHeader />
           <n-layout has-sider class="flex-1">
-            <AppMenu />
+            <AppMenu :default-value="defaultValue" />
             <n-layout class="h-100%">
               <router-view v-slot="{ Component }">
                 <transition name="fade" mode="out-in">
-                  <component :is="Component" />
+                  <component :is="Component" @set-default-value="onSetDefaultValue" />
                 </transition>
               </router-view>
             </n-layout>
@@ -60,6 +60,12 @@ onBeforeUnmount(() => {
   unwatchTheme?.()
   unwatchThemeOverrides?.()
 })
+
+// 菜单默认值处理
+const defaultValue = ref('')
+function onSetDefaultValue(val) {
+  defaultValue.value = val
+}
 </script>
 
 <style>
