@@ -14,6 +14,12 @@ const routes = [
     meta: { hideLayout: true },
   },
   {
+    path: '/register',
+    name: 'RegisterView',
+    component: () => import('../views/Register.vue'),
+    meta: { hideLayout: true },
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/',
   },

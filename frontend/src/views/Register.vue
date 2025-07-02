@@ -8,30 +8,33 @@
       class="tracking-light px-4 pb-5 pt-5 text-center text-[28px] font-bold leading-tight opacity-0 transition-opacity duration-1000"
       :class="{ 'opacity-100': show[1] }"
     >
-      欢迎回来
+      注册账号
     </h2>
     <n-card
       class="max-w-500px w-80% flex flex-col border border-gray-200 rounded-xl py-5 opacity-0 shadow-lg transition-opacity duration-1500"
       :class="{ 'opacity-100': show[2] }"
     >
       <n-form ref="formRef" :model="model" :rules="rules" :show-label="false" :show-feedback="false">
+        <n-form-item path="nickname">
+          <n-input v-model:value="model.nickname" size="large" round placeholder="昵称" />
+        </n-form-item>
         <n-form-item path="username">
-          <n-input v-model:value="model.username" size="large" round placeholder="账号" />
+          <n-input v-model:value="model.username" size="large" round placeholder="账号" class="mt-5" />
         </n-form-item>
         <n-form-item path="password">
           <n-input
-            v-model:value="model.password" type="password" show-password-on="mousedown" size="large" round
-            placeholder="密码" class="mt-5"
+            v-model:value="model.password" type="password" show-password-on="mousedown" size="large"
+            round placeholder="密码" class="mt-5"
           />
         </n-form-item>
         <p class="mt-5 pr-2 text-right text-xs">
-          没有账号？你可以
-          <n-button size="tiny" type="primary" strong quaternary @click="goToRegister">
-            注册
+          已有账号？你可以
+          <n-button size="tiny" type="primary" strong quaternary @click="goToLogin">
+            登录
           </n-button>
         </p>
         <n-button round strong secondary type="primary" class="mt-5 w-100%" @click="handleLogin">
-          登录
+          注册账号
         </n-button>
       </n-form>
     </n-card>
@@ -39,10 +42,9 @@
 </template>
 
 <script setup>
-import Bowser from 'bowser'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import bgUrl from '@/assets/login/bg.png'
+import bgUrl from '@/assets/register/bg.png'
 import { request } from '@/utils/http/request'
 
 defineOptions({
@@ -62,10 +64,20 @@ onMounted(() => {
 // 表单参数
 const formRef = ref()
 const model = ref({
+  nickname: '',
   username: '',
   password: '',
 })
 const rules = ref({
+  nickname: {
+    required: true,
+    validator(rule, value) {
+      if (!value) {
+        return new Error('请输入昵称')
+      }
+      return true
+    },
+  },
   username: {
     required: true,
     validator(rule, value) {
@@ -98,28 +110,18 @@ async function handleLogin() {
       return false
     }
   })
-  const browser = Bowser.getParser(window.navigator.userAgent)
-  request.post('/auth/login', {
+  request.post('/auth/register', {
+    nickname: model.value.nickname,
     username: model.value.username,
     password: model.value.password,
-    browser_name: browser.getBrowserName(),
-    browser_version: browser.getBrowserVersion(),
-    engine_name: browser.getEngineName(),
-    os_name: browser.getOSName(),
-    os_version: browser.getOSVersion(),
-    platform_type: browser.getPlatformType(),
-    ua: browser.getUA(),
-  }).then((res) => {
-    const access_token = res.data.access_token
-    const refresh_token = res.data.refresh_token
-    localStorage.setItem('token', access_token)
-    localStorage.setItem('refresh_token', refresh_token)
-    window.$message?.success('登录成功')
+  }).then(() => {
+    window.$message?.success('注册成功，请进行登录')
+    router.push('/login')
   })
 }
 
-// 前往注册
-function goToRegister() {
-  router.push('/register')
+// 前往登录
+function goToLogin() {
+  router.push('/login')
 }
 </script>

@@ -1,26 +1,67 @@
+import Bowser from 'bowser'
 import CryptoJS from 'crypto-js'
+import { request } from './request'
 
 export function setupInterceptors(axiosInstance) {
   const SUCCESS_CODES = [0, 200]
   // 响应成功拦截器
-  function resResolve(response) {
-    const { data, status, statusText, headers } = response
+  async function resResolve(response) {
+    const { data, status, statusText, headers, config } = response
+    // 如果响应为 JSON 类型
     if (headers['content-type']?.includes('json')) {
       if (SUCCESS_CODES.includes(data?.code)) {
         return Promise.resolve(data)
       }
       const code = data?.code ?? status
-      // 根据code处理对应的操作，并返回处理后的message
+      if ([800001, 800002].includes(code)) {
+        // 刷新 token 逻辑
+        try {
+          const browser = Bowser.getParser(window.navigator.userAgent)
+          const res = await request.post('/auth/refresh', {
+            refresh_token: localStorage.getItem('refresh_token') || '',
+            browser_name: browser.getBrowserName(),
+            browser_version: browser.getBrowserVersion(),
+            engine_name: browser.getEngineName(),
+            os_name: browser.getOSName(),
+            os_version: browser.getOSVersion(),
+            platform_type: browser.getPlatformType(),
+            ua: browser.getUA(),
+          })
+          const access_token = res.data.access_token
+          const refresh_token = res.data.refresh_token
+          // 保存新 token
+          localStorage.setItem('token', access_token)
+          localStorage.setItem('refresh_token', refresh_token)
+          // 使用新 token 重发原始请求
+          return request(config)
+        }
+        catch (err) {
+          localStorage.removeItem('token')
+          localStorage.removeItem('refresh_token')
+          location.href = '/login'
+          return Promise.reject({
+            code,
+            message: '登录已过期，请重新登录',
+            error: err,
+          })
+        }
+      }
+      if ([800006, 800007, 800008].includes(code)) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('refresh_token')
+        location.href = '/login'
+        return Promise.reject({
+          code,
+          message: '登录已失效，请重新登录',
+          error: data,
+        })
+      }
+      // 其他错误统一处理
       const message = resolveResError(code, data?.message ?? statusText)
-      return Promise.reject({
-        code,
-        message,
-        error: data ?? response,
-      })
+      return Promise.reject({ code, message, error: data ?? response })
     }
     return Promise.resolve(data ?? response)
   }
-
   axiosInstance.interceptors.request.use(reqResolve, reqReject)
   axiosInstance.interceptors.response.use(resResolve, resReject)
 }
@@ -28,14 +69,13 @@ export function setupInterceptors(axiosInstance) {
 // 请求成功拦截器
 function reqResolve(config) {
   // 处理不需要token的请求
-  // if (config.needToken !== false) {
-  //   const { accessToken } = useAuthStore();
-  //   if (accessToken) {
-  //     config.headers["X-Auth-Token"] = accessToken;
-  //   }
-  // }
+  const token = localStorage.getItem('token') || ''
+  // 如果有 token，就添加到请求头 Authorization 中
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   // 添加 Accept-Language 头参数
-  // config.headers["Accept-Language"] = lStorage.get("locale") || "zh";
+  config.headers['Accept-Language'] = localStorage.getItem('locale') || 'zh'
   // 加密请求参数
   if (config.data === undefined) {
     config.data = {}
@@ -104,11 +144,11 @@ function removeEmptyValues(obj) {
 
 // 特定异常处理
 function resolveResError(code, message) {
+  // 如果需要特殊处理
   switch (code) {
-    case 900005:
-      // 退出登录
-
+    case 'xxx':
       break
   }
+  window.$message?.warning(message)
   return message
 }

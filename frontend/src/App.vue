@@ -1,11 +1,9 @@
 <template>
-  <n-config-provider :theme="theme">
+  <n-config-provider :theme="theme" :theme-overrides="themeOverrides">
     <n-message-provider>
       <n-layout>
         <div class="h-100vh flex flex-col">
-          <n-layout-header bordered>
-            LifeBoard · 🗂 你的生活仪表盘
-          </n-layout-header>
+          <AppHeader />
           <n-layout has-sider class="flex-1">
             <n-layout-sider
               v-if="!route.meta.hideLayout" class="h-100%" bordered show-trigger collapse-mode="width"
@@ -30,42 +28,58 @@
 <script setup>
 import { h, onBeforeUnmount, onMounted, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import { getSystemTheme, watchSystemTheme } from './utils/theme'
+import AppHeader from '@/components/AppHeader.vue'
+import { getSystemTheme, getSystemThemeOverrides, watchSystemTheme, watchSystemThemeOverrides } from './utils/theme'
 
 const theme = ref(getSystemTheme())
+const themeOverrides = ref(getSystemThemeOverrides())
 
 let unwatchTheme
+let unwatchThemeOverrides
 onMounted(() => {
   unwatchTheme = watchSystemTheme((newTheme) => {
     theme.value = newTheme
+  })
+
+  unwatchThemeOverrides = watchSystemThemeOverrides((newTheme) => {
+    themeOverrides.value = newTheme
   })
 })
 
 onBeforeUnmount(() => {
   // 组件卸载时取消监听
   unwatchTheme?.()
+  unwatchThemeOverrides?.()
 })
 
 const route = useRoute()
-
-const menuOptions = [
-  {
-    label: () => h(
-      RouterLink,
-      {
-        to: {
-          name: 'HomeView',
+const menuOptions = ref([])
+if (!route.meta.hideLayout) {
+  menuOptions.value = [
+    {
+      label: () => h(
+        RouterLink,
+        {
+          to: {
+            name: 'HomeView',
+          },
         },
-      },
-      { default: () => '首页' },
-    ),
-    key: 'home',
-    icon: () => h('i', { class: 'i-tabler-home' }),
-  },
-]
+        { default: () => '首页' },
+      ),
+      key: 'home',
+      icon: () => h('i', { class: 'i-tabler-home' }),
+    },
+  ]
+}
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* 路由过渡动画 */
 .fade-enter-active,
 .fade-leave-active {
@@ -75,10 +89,5 @@ const menuOptions = [
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-/* 覆盖 NaiveUI 链接样式 */
-a {
-  text-decoration: none;
 }
 </style>
