@@ -14,17 +14,26 @@
       class="max-w-500px w-80% flex flex-col border border-gray-200 rounded-xl py-5 opacity-0 shadow-lg transition-opacity duration-1500"
       :class="{ 'opacity-100': show[2] }"
     >
-      <n-input v-model:value="username" size="large" round placeholder="账号" />
-      <n-input v-model:value="password" size="large" round placeholder="密码" class="mt-5" />
-      <p class="mt-5 pr-2 text-right text-xs">
-        没有账号？你可以
-        <n-button size="tiny" type="primary" strong quaternary @click="goToRegister">
-          注册
+      <n-form ref="formRef" :model="model" :rules="rules" :show-label="false" :show-feedback="false">
+        <n-form-item path="username">
+          <n-input v-model:value="model.username" size="large" round placeholder="账号" />
+        </n-form-item>
+        <n-form-item path="password">
+          <n-input
+            v-model:value="model.password" type="password" show-password-on="mousedown" size="large" round
+            placeholder="密码" class="mt-5"
+          />
+        </n-form-item>
+        <p class="mt-5 pr-2 text-right text-xs">
+          没有账号？你可以
+          <n-button size="tiny" type="primary" strong quaternary @click="goToRegister">
+            注册
+          </n-button>
+        </p>
+        <n-button round strong secondary type="primary" class="mt-5 w-100%" @click="handleLogin">
+          登录
         </n-button>
-      </p>
-      <n-button round strong secondary type="primary" class="mt-5 w-100%" @click="handleLogin">
-        登录
-      </n-button>
+      </n-form>
     </n-card>
   </div>
 </template>
@@ -51,15 +60,48 @@ onMounted(() => {
 })
 
 // 表单参数
-const username = ref('')
-const password = ref('')
+const formRef = ref()
+const model = ref({
+  username: '',
+  password: '',
+})
+const rules = ref({
+  username: {
+    required: true,
+    validator(rule, value) {
+      if (!value) {
+        return new Error('请输入账号')
+      }
+      return true
+    },
+  },
+  password: {
+    required: true,
+    validator(rule, value) {
+      if (!value) {
+        return new Error('请输入密码')
+      }
+      return true
+    },
+  },
+})
 
 // 执行登录
-function handleLogin() {
+async function handleLogin() {
+  await formRef.value?.validate((errors) => {
+    if (errors) {
+      errors.forEach((_errors) => {
+        _errors.forEach((item) => {
+          window.$message?.error(item.message)
+        })
+      })
+      return false
+    }
+  })
   const browser = Bowser.getParser(window.navigator.userAgent)
   request.post('/auth/login', {
-    username: username.value,
-    password: password.value,
+    username: model.value.username,
+    password: model.value.password,
     browser_name: browser.getBrowserName(),
     browser_version: browser.getBrowserVersion(),
     engine_name: browser.getEngineName(),
