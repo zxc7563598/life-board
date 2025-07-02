@@ -12,4 +12,7 @@
 defineOptions({
   name: 'HomeView',
 })
+
+const emit = defineEmits(['setDefaultValue'])
+emit('setDefaultValue', 'home')
 </script>

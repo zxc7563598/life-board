@@ -1,16 +1,31 @@
 <template>
   <n-layout-sider
-    v-if="!route.meta.hideLayout" class="h-100%" bordered show-trigger collapse-mode="width"
+    v-if="!route.meta.hideLayout && menuDefaultValue" class="h-100%" bordered show-trigger collapse-mode="width"
     :collapsed-width="64" :width="240" :native-scrollbar="false" :collapsed="collapsed" @collapse="collapsed = true" @expand="collapsed = false"
   >
-    <n-menu :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" default-value="home" :collapsed="collapsed" />
+    <n-menu :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" :default-value="menuDefaultValue" :collapsed="collapsed" />
   </n-layout-sider>
 </template>
 
 <script setup>
-import { h, ref } from 'vue'
+import { h, ref, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { request } from '@/utils/http/request'
+
+const props = defineProps({
+  defaultValue: String,
+})
+
+const menuDefaultValue = ref('')
+watch(
+  () => props.defaultValue,
+  (val) => {
+    if (val && Object.keys(val).length > 0) {
+      menuDefaultValue.value = val
+    }
+  },
+  { immediate: true },
+)
 
 const route = useRoute()
 const router = useRouter()
@@ -38,18 +53,26 @@ if (!route.meta.hideLayout) {
     {
       key: 'divider-1',
       type: 'divider',
-      // props: {
-      //   style: {
-      //     marginLeft: '32px',
-      //   },
-      // },
+    },
+    {
+      label: () => h(
+        RouterLink,
+        {
+          to: {
+            name: 'ProfileView',
+          },
+        },
+        { default: () => '个人配置' },
+      ),
+      key: 'profile',
+      icon: () => h('i', { class: 'i-tabler-settings' }),
     },
     {
       label: '退出登录',
       key: 'logout',
       icon: () => h('i', { class: 'i-tabler-logout' }),
       onClick: () => {
-        logout() // 调用你自己的退出方法
+        logout()
       },
     },
   ]
