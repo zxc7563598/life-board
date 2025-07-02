@@ -20,6 +20,8 @@ Route::group('/api', function () {
     Route::post('/auth/register', [controller\AuthController::class, 'register'])->name('[执行注册]');
     Route::post('/auth/login', [controller\AuthController::class, 'login'])->name('[执行登录]');
     Route::post('/auth/refresh', [controller\AuthController::class, 'refreshAll'])->name('[刷新token]');
+    Route::post('/auth/profile', [controller\AuthController::class, 'getProfile'])->name('[获取用户个人信息]');
+    Route::post('/auth/set-profile', [controller\AuthController::class, 'setProfile'])->name('[变更用户个人信息]');
     Route::post('/auth/logout', [controller\AuthController::class, 'logout'])->name('[退出登录]');
 })->middleware([
     app\middleware\AccessMiddleware::class,

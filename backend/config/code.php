@@ -12,6 +12,7 @@ return [
     800007 => "User session expired", // 账号登录已过期（refresh_token存在但数据库查不到）
     800008 => "User session expired", // 账号登录已过期（refresh_token存在但已被销毁）
     800009 => "This account is already registered", // 账号已经被注册
+    800010 => "User session expired", // 账号登录已过期（refresh_token存在但已被销毁）
 
     900001 => "Invalid request parameters", // 请求参数异常
     900002 => "Signature verification failed", // 签名验证异常

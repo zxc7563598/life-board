@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="min-h-100% flex flex-col items-center bg-[#f9fafb] dark:bg-[#121212]">
     <n-image
       width="320" :src="bgUrl" class="mt-5 rounded-xl opacity-0 transition-opacity duration-800"
       :class="{ 'opacity-100': show[0] }"
@@ -11,7 +11,7 @@
       注册账号
     </h2>
     <n-card
-      class="max-w-500px w-80% flex flex-col border border-gray-200 rounded-xl py-5 opacity-0 shadow-lg transition-opacity duration-1500"
+      class="max-w-500px w-80% flex flex-col border border-gray-200 rounded-xl py-5 opacity-0 shadow-lg transition-opacity duration-1500 dark:border-gray-700 dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
       :class="{ 'opacity-100': show[2] }"
     >
       <n-form ref="formRef" :model="model" :rules="rules" :show-label="false" :show-feedback="false">
@@ -33,7 +33,7 @@
             登录
           </n-button>
         </p>
-        <n-button round strong secondary type="primary" class="mt-5 w-100%" @click="handleLogin">
+        <n-button round strong secondary type="primary" class="mt-5 w-100%" :loading="loading" @click="handleLogin">
           注册账号
         </n-button>
       </n-form>
@@ -62,6 +62,7 @@ onMounted(() => {
 })
 
 // 表单参数
+const loading = ref(false)
 const formRef = ref()
 const model = ref({
   nickname: '',
@@ -110,11 +111,13 @@ async function handleLogin() {
       return false
     }
   })
+  loading.value = true
   request.post('/auth/register', {
     nickname: model.value.nickname,
     username: model.value.username,
     password: model.value.password,
   }).then(() => {
+    loading.value = false
     window.$message?.success('注册成功，请进行登录')
     router.push('/login')
   })
