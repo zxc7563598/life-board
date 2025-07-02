@@ -9,12 +9,16 @@
 
 <script setup>
 import { h, ref } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { request } from '@/utils/http/request'
 
 const route = useRoute()
+const router = useRouter()
 
+// 设置菜单默认折叠
 const collapsed = ref(true)
 
+// 初始化菜单信息
 const menuOptions = ref([])
 if (!route.meta.hideLayout) {
   menuOptions.value = [
@@ -31,6 +35,35 @@ if (!route.meta.hideLayout) {
       key: 'home',
       icon: () => h('i', { class: 'i-tabler-home' }),
     },
+    {
+      key: 'divider-1',
+      type: 'divider',
+      // props: {
+      //   style: {
+      //     marginLeft: '32px',
+      //   },
+      // },
+    },
+    {
+      label: '退出登录',
+      key: 'logout',
+      icon: () => h('i', { class: 'i-tabler-logout' }),
+      onClick: () => {
+        logout() // 调用你自己的退出方法
+      },
+    },
   ]
+}
+
+// 退出登录
+function logout() {
+  request.post('/auth/logout', {
+    refresh_token: localStorage.getItem('refresh_token') || '',
+  }).then(() => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('refresh_token')
+    window.$message?.success('已退出登录')
+    router.push('/login')
+  })
 }
 </script>
