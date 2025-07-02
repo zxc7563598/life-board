@@ -30,7 +30,7 @@
             注册
           </n-button>
         </p>
-        <n-button round strong secondary type="primary" class="mt-5 w-100%" @click="handleLogin">
+        <n-button round strong secondary type="primary" class="mt-5 w-100%" :loading="loading" @click="handleLogin">
           登录
         </n-button>
       </n-form>
@@ -60,6 +60,7 @@ onMounted(() => {
 })
 
 // 表单参数
+const loading = ref(false)
 const formRef = ref()
 const model = ref({
   username: '',
@@ -99,6 +100,7 @@ async function handleLogin() {
     }
   })
   const browser = Bowser.getParser(window.navigator.userAgent)
+  loading.value = true
   request.post('/auth/login', {
     username: model.value.username,
     password: model.value.password,
@@ -110,6 +112,7 @@ async function handleLogin() {
     platform_type: browser.getPlatformType(),
     ua: browser.getUA(),
   }).then((res) => {
+    loading.value = false
     const access_token = res.data.access_token
     const refresh_token = res.data.refresh_token
     localStorage.setItem('token', access_token)

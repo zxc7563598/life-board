@@ -33,7 +33,7 @@
             登录
           </n-button>
         </p>
-        <n-button round strong secondary type="primary" class="mt-5 w-100%" @click="handleLogin">
+        <n-button round strong secondary type="primary" class="mt-5 w-100%" :loading="loading" @click="handleLogin">
           注册账号
         </n-button>
       </n-form>
@@ -62,6 +62,7 @@ onMounted(() => {
 })
 
 // 表单参数
+const loading = ref(false)
 const formRef = ref()
 const model = ref({
   nickname: '',
@@ -110,11 +111,13 @@ async function handleLogin() {
       return false
     }
   })
+  loading.value = true
   request.post('/auth/register', {
     nickname: model.value.nickname,
     username: model.value.username,
     password: model.value.password,
   }).then(() => {
+    loading.value = false
     window.$message?.success('注册成功，请进行登录')
     router.push('/login')
   })
