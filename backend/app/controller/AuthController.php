@@ -23,7 +23,7 @@ class AuthController
      * 
      * @return Response 
      */
-    public function register(Request $request)
+    public function register(Request $request): Response
     {
         // 获取参数
         $nickname = $request->data['nickname'];
@@ -60,7 +60,7 @@ class AuthController
      * 
      * @param Request $request 
      */
-    public function login(Request $request)
+    public function login(Request $request): Response
     {
         // 获取参数
         $username = $request->data['username'];
@@ -106,7 +106,7 @@ class AuthController
      * 
      * @return Response 
      */
-    public function refreshAll(Request $request)
+    public function refreshAll(Request $request): Response
     {
         // 获取参数
         $refresh_token = $request->data['refresh_token'];
@@ -149,7 +149,7 @@ class AuthController
      * 
      * @return Response 
      */
-    public function logout(Request $request)
+    public function logout(Request $request): Response
     {
         // 获取参数
         $refresh_token = $request->data['refresh_token'];
