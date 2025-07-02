@@ -2,13 +2,14 @@
 
 namespace app\middleware;
 
-use support\Request;
 use app\service\TokenService;
 use Carbon\Carbon;
 use support\Redis;
-use support\Response;
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
 
-class AuthMiddleware
+class AuthMiddleware implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler): Response
     {

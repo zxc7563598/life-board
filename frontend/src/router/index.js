@@ -20,6 +20,12 @@ const routes = [
     meta: { hideLayout: true },
   },
   {
+    path: '/profile',
+    name: 'ProfileView',
+    component: () => import('../views/Profile.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/',
   },

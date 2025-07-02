@@ -23,7 +23,7 @@ class AuthController
      * 
      * @return Response 
      */
-    public function register(Request $request)
+    public function register(Request $request): Response
     {
         // 获取参数
         $nickname = $request->data['nickname'];
@@ -60,7 +60,7 @@ class AuthController
      * 
      * @param Request $request 
      */
-    public function login(Request $request)
+    public function login(Request $request): Response
     {
         // 获取参数
         $username = $request->data['username'];
@@ -106,7 +106,7 @@ class AuthController
      * 
      * @return Response 
      */
-    public function refreshAll(Request $request)
+    public function refreshAll(Request $request): Response
     {
         // 获取参数
         $refresh_token = $request->data['refresh_token'];
@@ -143,13 +143,74 @@ class AuthController
     }
 
     /**
+     * 获取用户个人信息
+     * 
+     * @return Response 
+     */
+    public function getProfile(Request $request): Response
+    {
+        // 获取数据
+        $user = User::where('id', $request->uid)->first([
+            'nickname' => 'nickname',
+            'username' => 'username',
+        ]);
+        if (empty($user)) {
+            return fail($request, 800010);
+        }
+        // 返回数据
+        return success($request, [
+            'profile_card' => [
+                'nickname' => $user->nickname,
+                'username' => $user->username,
+            ]
+        ]);
+    }
+
+    /**
+     * 变更用户个人信息
+     * 
+     * @param string $nickname 昵称
+     * @param string $username 账号
+     * @param string $password 密码
+     * 
+     * @return Response 
+     */
+    public function setProfile(Request $request): Response
+    {
+        // 获取参数
+        $nickname = $request->data['nickname'];
+        $username = $request->data['username'];
+        $password = $request->data['password'] ?? null;
+        // 获取数据
+        $user = User::where('id', $request->uid)->first();
+        if (empty($user)) {
+            return fail($request, 800010);
+        }
+        $login = false;
+        if (!empty($password) || ($user->username != $username)) {
+            $login = true;
+        }
+        // 存储信息
+        $user->nickname = $nickname;
+        $user->username = $username;
+        if (!empty($password)) {
+            $user->password = $password;
+        }
+        $user->save();
+        // 返回数据
+        return success($request, [
+            'login' => $login
+        ]);
+    }
+
+    /**
      * 退出登录
      * 
      * @param string $refresh_token refresh_token
      * 
      * @return Response 
      */
-    public function logout(Request $request)
+    public function logout(Request $request): Response
     {
         // 获取参数
         $refresh_token = $request->data['refresh_token'];

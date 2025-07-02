@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="min-h-100% flex flex-col items-center bg-[#f9fafb] dark:bg-[#121212]">
     <n-image
       width="320" :src="bgUrl" class="mt-5 rounded-xl opacity-0 transition-opacity duration-800"
       :class="{ 'opacity-100': show[0] }"
@@ -11,7 +11,7 @@
       欢迎回来
     </h2>
     <n-card
-      class="max-w-500px w-80% flex flex-col border border-gray-200 rounded-xl py-5 opacity-0 shadow-lg transition-opacity duration-1500"
+      class="max-w-500px w-80% flex flex-col border border-gray-200 rounded-xl py-5 opacity-0 shadow-lg transition-opacity duration-1500 dark:border-gray-700 dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
       :class="{ 'opacity-100': show[2] }"
     >
       <n-form ref="formRef" :model="model" :rules="rules" :show-label="false" :show-feedback="false">
@@ -30,7 +30,7 @@
             注册
           </n-button>
         </p>
-        <n-button round strong secondary type="primary" class="mt-5 w-100%" @click="handleLogin">
+        <n-button round strong secondary type="primary" class="mt-5 w-100%" :loading="loading" @click="handleLogin">
           登录
         </n-button>
       </n-form>
@@ -60,6 +60,7 @@ onMounted(() => {
 })
 
 // 表单参数
+const loading = ref(false)
 const formRef = ref()
 const model = ref({
   username: '',
@@ -99,6 +100,7 @@ async function handleLogin() {
     }
   })
   const browser = Bowser.getParser(window.navigator.userAgent)
+  loading.value = true
   request.post('/auth/login', {
     username: model.value.username,
     password: model.value.password,
@@ -110,11 +112,13 @@ async function handleLogin() {
     platform_type: browser.getPlatformType(),
     ua: browser.getUA(),
   }).then((res) => {
+    loading.value = false
     const access_token = res.data.access_token
     const refresh_token = res.data.refresh_token
     localStorage.setItem('token', access_token)
     localStorage.setItem('refresh_token', refresh_token)
     window.$message?.success('登录成功')
+    router.push('/home')
   })
 }
 

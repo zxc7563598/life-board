@@ -1,20 +1,15 @@
 <template>
-  <n-config-provider :theme="theme" :theme-overrides="themeOverrides">
+  <n-config-provider :theme="theme" :theme-overrides="themeOverrides" :class="{ dark: isDark }">
     <n-message-provider>
       <n-layout>
         <div class="h-100vh flex flex-col">
           <AppHeader />
           <n-layout has-sider class="flex-1">
-            <n-layout-sider
-              v-if="!route.meta.hideLayout" class="h-100%" bordered show-trigger collapse-mode="width"
-              :collapsed-width="64" :width="240" :native-scrollbar="false"
-            >
-              <n-menu :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" default-value="home" />
-            </n-layout-sider>
+            <AppMenu :default-value="defaultValue" />
             <n-layout class="h-100%">
               <router-view v-slot="{ Component }">
                 <transition name="fade" mode="out-in">
-                  <component :is="Component" />
+                  <component :is="Component" @set-default-value="onSetDefaultValue" />
                 </transition>
               </router-view>
             </n-layout>
@@ -26,21 +21,35 @@
 </template>
 
 <script setup>
-import { h, onBeforeUnmount, onMounted, ref } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
+import AppMenu from '@/components/AppMenu.vue'
 import { getSystemTheme, getSystemThemeOverrides, watchSystemTheme, watchSystemThemeOverrides } from './utils/theme'
 
+// 初始化获取主题信息
 const theme = ref(getSystemTheme())
 const themeOverrides = ref(getSystemThemeOverrides())
+const isDark = ref(false)
+if (theme.value.name === 'dark') {
+  isDark.value = true
+}
+else {
+  isDark.value = false
+}
 
+// 监听主题变更
 let unwatchTheme
 let unwatchThemeOverrides
 onMounted(() => {
   unwatchTheme = watchSystemTheme((newTheme) => {
     theme.value = newTheme
+    if (theme.value.name === 'dark') {
+      isDark.value = true
+    }
+    else {
+      isDark.value = false
+    }
   })
-
   unwatchThemeOverrides = watchSystemThemeOverrides((newTheme) => {
     themeOverrides.value = newTheme
   })
@@ -52,24 +61,10 @@ onBeforeUnmount(() => {
   unwatchThemeOverrides?.()
 })
 
-const route = useRoute()
-const menuOptions = ref([])
-if (!route.meta.hideLayout) {
-  menuOptions.value = [
-    {
-      label: () => h(
-        RouterLink,
-        {
-          to: {
-            name: 'HomeView',
-          },
-        },
-        { default: () => '首页' },
-      ),
-      key: 'home',
-      icon: () => h('i', { class: 'i-tabler-home' }),
-    },
-  ]
+// 菜单默认值处理
+const defaultValue = ref('')
+function onSetDefaultValue(val) {
+  defaultValue.value = val
 }
 </script>
 
