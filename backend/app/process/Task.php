@@ -193,9 +193,9 @@ class Task
                 $header = substr($response, 0, $headerSize);
                 $body = substr($response, $headerSize);
                 $filename = 'downloaded_' . date('Ymd_His') . '.zip';
-                if (preg_match('/Content-Disposition:.*filename=["\']?([^"\']+)["\']?/i', $header, $nameMatch)) {
-                    $filename = urldecode($nameMatch[1]);
-                }
+                // if (preg_match('/Content-Disposition:.*filename=["\']?([^"\']+)["\']?/i', $header, $nameMatch)) {
+                //     $filename = urldecode($nameMatch[1]);
+                // }
                 $directory = public_path('bill/wechat/' . Carbon::now()->timezone(config('app.default_timezone'))->format('YmdHis'));
                 if (!is_dir($directory)) {
                     if (!mkdir($directory, 0755, true)) {  // 尝试递归创建目录
