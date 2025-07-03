@@ -1,6 +1,6 @@
 <?php
 
-namespace app\queue\redis\bill;
+namespace app\queue\redis;
 
 use app\model\BillRecords;
 use Carbon\Carbon;
