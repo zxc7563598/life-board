@@ -1,6 +1,16 @@
 <?php
 
 return [
+    "Uncategorized" => "不记收支",
+    "Income" => "收入",
+    "Expense" => "支出",
+    "yes" => "是",
+    "no" => "否",
+    "Wechat" => "微信",
+    "Alipay" => "支付宝",
+    "Disable" => "停用",
+    "Enable" => "启用",
+
     "success" => "成功",
 
     "User session expired" => "账号登录已过期",

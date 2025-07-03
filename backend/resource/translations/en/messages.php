@@ -1,6 +1,16 @@
 <?php
 
 return [
+    "Uncategorized" => "Uncategorized",
+    "Income" => "Income",
+    "Expense" => "Expense",
+    "yes" => "yes",
+    "no" => "no",
+    "Wechat" => "Wechat",
+    "Alipay" => "Alipay",
+    "Disable" => "Disable",
+    "Enable" => "Enable",
+
     "success" => "success",
 
     "User session expired" => "User session expired",
