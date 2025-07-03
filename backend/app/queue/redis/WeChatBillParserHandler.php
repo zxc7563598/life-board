@@ -18,18 +18,15 @@ class WeChatBillParserHandler implements Consumer
     // 消费
     public function consume($data)
     {
-        sublog('队列任务', '微信账单解析', '开始解析信息', $data);
         // 获取参数
         $zipFile = $data['path'];
         $user_id = $data['user_id'];
         // 获取数据
         $options = new ParseOptions($zipFile);
         $options->onPasswordFound = function ($password) {
-            sublog('队列任务', '微信账单解析', '压缩包密码破解成功', ['password' => $password]);
             return true;
         };
         $options->onDataParsed = function ($data) use ($user_id) {
-            sublog('队列任务', '微信账单解析', '解析到数据', ['count' => count($data['data'])]);
             foreach ($data['data'] as $row) {
                 $bill_records = BillRecords::where('user_id', $user_id)->where('trade_no', $row[8])->count();
                 if (!$bill_records) {
@@ -55,7 +52,6 @@ class WeChatBillParserHandler implements Consumer
                     $bill_records->save();
                 }
             }
-            sublog('队列任务', '微信账单解析', '完成数据库入库', []);
             return true;
         };
         $parser = new WechatBillParser();
