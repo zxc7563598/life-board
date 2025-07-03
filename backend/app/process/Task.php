@@ -28,7 +28,7 @@ class Task
             ]);
             foreach ($user as $_user) {
                 if (!empty($_user->mail_host) && !empty($_user->mail_username) && !empty($_user->mail_password)) {
-                    sublog('定时任务', '账单队列', '用户开始获取数据', $_user);
+                    sublog('定时任务', '账单队列', '用户开始获取数据', $_user->toArray());
                     $mail_host = "{{$_user->mail_host}}INBOX";
                     $downloads = self::fetchBillAttachmentsFromMailbox($mail_host, $_user->mail_username, $_user->mail_password);
                     sublog('定时任务', '账单队列', '获取到数据', $downloads);
