@@ -15,6 +15,13 @@
 
 use Webman\Route;
 use app\controller;
+use Webman\RedisQueue\Client;
+
+Route::any('/test', function () {
+    $data = json_decode('{"user_id":1,"path":"\/www\/wwwroot\/life-board\/backend\/public\/bill\/wechat\/20250703145005\/\u5fae\u4fe1\u652f\u4ed8\u8d26\u5355(20240701-20241001)\u2014\u2014\u3010\u89e3\u538b\u5bc6\u7801\u53ef\u5728\u5fae\u4fe1\u652f\u4ed8\u516c\u4f17\u53f7\u67e5\u770b\u3011.zip"}', true);
+    print_r($data);
+    Client::send('wechat-bill-parser', $data);
+});
 
 Route::group('/api', function () {
     Route::post('/auth/register', [controller\AuthController::class, 'register'])->name('[执行注册]');
