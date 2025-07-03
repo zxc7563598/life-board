@@ -18,6 +18,7 @@ return [
     "Account has been disabled" => "账号已停用",
     "Incorrect username or password" => "账号或密码错误",
     "This account is already registered" => "账号已经被注册",
+    "Failed to connect to the mailbox. Please check if the information you entered is correct" => "连接邮箱失败，请检查输入信息是否正确",
 
     "Invalid request parameters" => "请求参数异常",
     "Signature verification failed" => "签名验证异常",
