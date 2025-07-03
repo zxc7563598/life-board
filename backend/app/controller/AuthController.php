@@ -249,6 +249,13 @@ class AuthController
         if (empty($user)) {
             return fail($request, 800010);
         }
+        // 测试连接
+        $imap = @imap_open("{{$mail_host}}INBOX", $mail_username, $mail_password, OP_READONLY);
+        if ($imap === false) {
+            return fail($request, 800011);
+        }
+        imap_close($imap);
+        // 存储信息
         $user->mail_host = $mail_host;
         $user->mail_username = $mail_username;
         $user->mail_password = $mail_password;
