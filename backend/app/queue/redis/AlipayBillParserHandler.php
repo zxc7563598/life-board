@@ -29,9 +29,8 @@ class AlipayBillParserHandler implements Consumer
             return true;
         };
         $options->onDataParsed = function ($data) use ($user_id) {
-            sublog('队列任务', '支付宝账单解析', '解析到数据', ['count' => count($data['data']), 'user_id' => $user_id]);
+            sublog('队列任务', '支付宝账单解析', '解析到数据', ['count' => count($data['data'])]);
             foreach ($data['data'] as $row) {
-            sublog('队列任务', '支付宝账单解析', '数据', $row);
                 $bill_records = BillRecords::where('user_id', $user_id)->where('trade_no', $row[9])->count();
                 if (!$bill_records) {
                     $bill_records = new BillRecords();
