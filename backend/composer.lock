@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e01d33b6a6dd094936d86365e242f1e6",
+    "content-hash": "90dafc4d75ae84bfcfad7bbbfcb889d5",
     "packages": [
         {
             "name": "brick/math",
@@ -1095,6 +1095,46 @@
             "time": "2025-02-03T10:55:03+00:00"
         },
         {
+            "name": "hejunjie/alipay-bill-parser",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zxc7563598/php-alipay-bill-parser.git",
+                "reference": "d999b087343086b3c08051bc3b533294e850bf65"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zxc7563598/php-alipay-bill-parser/zipball/d999b087343086b3c08051bc3b533294e850bf65",
+                "reference": "d999b087343086b3c08051bc3b533294e850bf65",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hejunjie\\AlipayBillParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "何俊杰",
+                    "email": "junjie.he.925@gmail.com"
+                }
+            ],
+            "description": "一个高性能、自动化的支付宝账单解析器，支持压缩包密码自动破解与账单数据智能提取，适用于账单分析、账单自动化入账、个人理财工具开发等场景 | A fast, automated Alipay bill parser that cracks compressed file passwords and extracts bill data. Perfect for bill analysis, automatic bookkeeping, and personal finance tools",
+            "support": {
+                "issues": "https://github.com/zxc7563598/php-alipay-bill-parser/issues",
+                "source": "https://github.com/zxc7563598/php-alipay-bill-parser/tree/v1.0.0"
+            },
+            "time": "2025-05-26T10:56:24+00:00"
+        },
+        {
             "name": "hejunjie/error-log",
             "version": "v1.0.2",
             "source": {
@@ -1173,6 +1213,46 @@
                 "source": "https://github.com/zxc7563598/php-ip138/tree/v1.0.0"
             },
             "time": "2025-06-16T05:01:55+00:00"
+        },
+        {
+            "name": "hejunjie/wechat-bill-parser",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zxc7563598/php-wechat-bill-parser.git",
+                "reference": "e16c059001301cbce61181b7645882b75d21adf1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zxc7563598/php-wechat-bill-parser/zipball/e16c059001301cbce61181b7645882b75d21adf1",
+                "reference": "e16c059001301cbce61181b7645882b75d21adf1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hejunjie\\WechatBillParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "何俊杰",
+                    "email": "junjie.he.925@gmail.com"
+                }
+            ],
+            "description": "一个高性能、自动化的微信账单解析器，支持压缩包密码自动破解与账单数据智能提取，适用于账单分析、账单自动化入账、个人理财工具开发等场景 | A fast, automated Wechat bill parser that cracks compressed file passwords and extracts bill data. Perfect for bill analysis, automatic bookkeeping, and personal finance tools",
+            "support": {
+                "issues": "https://github.com/zxc7563598/php-wechat-bill-parser/issues",
+                "source": "https://github.com/zxc7563598/php-wechat-bill-parser/tree/v1.0.0"
+            },
+            "time": "2025-05-27T02:32:18+00:00"
         },
         {
             "name": "illuminate/bus",
