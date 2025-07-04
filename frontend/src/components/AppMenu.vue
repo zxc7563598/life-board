@@ -51,6 +51,19 @@ if (!route.meta.hideLayout) {
       icon: () => h('i', { class: 'i-tabler-home' }),
     },
     {
+      label: () => h(
+        RouterLink,
+        {
+          to: {
+            name: 'BillView',
+          },
+        },
+        { default: () => '我的账单' },
+      ),
+      key: 'bill',
+      icon: () => h('i', { class: 'i-tabler-receipt' }),
+    },
+    {
       key: 'divider-1',
       type: 'divider',
     },
