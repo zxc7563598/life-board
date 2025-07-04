@@ -24,6 +24,9 @@ Route::group('/api', function () {
     Route::post('/auth/set-profile', [controller\AuthController::class, 'setProfile'])->name('[变更用户个人信息]');
     Route::post('/auth/set-billmail-config', [controller\AuthController::class, 'setBillmailConfig'])->name('[变更账单监听邮箱配置]');
     Route::post('/auth/logout', [controller\AuthController::class, 'logout'])->name('[退出登录]');
+
+    Route::post('/bill/get-bill-search-enums', [controller\BillController::class, 'getBillSearchEnums'])->name('[获取账单搜索枚举信息]');
+    Route::post('/bill/get-bill-list', [controller\BillController::class, 'getBillList'])->name('[获取账单列表信息]');
 })->middleware([
     app\middleware\AccessMiddleware::class,
     app\middleware\LangMiddleware::class,
