@@ -24,6 +24,13 @@ Route::group('/api', function () {
     Route::post('/auth/set-profile', [controller\AuthController::class, 'setProfile'])->name('[变更用户个人信息]');
     Route::post('/auth/set-billmail-config', [controller\AuthController::class, 'setBillmailConfig'])->name('[变更账单监听邮箱配置]');
     Route::post('/auth/logout', [controller\AuthController::class, 'logout'])->name('[退出登录]');
+
+    Route::post('/bill/get-bill-search-enums', [controller\BillController::class, 'getBillSearchEnums'])->name('[获取账单搜索枚举信息]');
+    Route::post('/bill/get-bill-list', [controller\BillController::class, 'getBillList'])->name('[获取账单列表信息(分页)]');
+    Route::post('/bill/get-bill-list-all', [controller\BillController::class, 'getBillListAll'])->name('[获取账单列表信息(不分页)]');
+    Route::post('/bill/get-income-categories', [controller\BillController::class, 'getIncomeCategories'])->name('[获取收入分类]');
+    Route::post('/bill/get-expense-categories', [controller\BillController::class, 'getExpenseCategories'])->name('[获取支出分类]');
+    Route::post('/bill/get-financial-summary', [controller\BillController::class, 'getFinancialSummary'])->name('[获取阶段收支信息]');
 })->middleware([
     app\middleware\AccessMiddleware::class,
     app\middleware\LangMiddleware::class,

@@ -138,7 +138,6 @@ watch(
           }
         })
       }
-      console.warn(mail_providers.value)
     }
   },
   { immediate: true },
