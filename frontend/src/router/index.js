@@ -32,6 +32,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/bill-analytics',
+    name: 'BillAnalyticsView',
+    component: () => import('../views/BillAnalytics.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/',
   },
