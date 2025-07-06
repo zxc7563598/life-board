@@ -1,9 +1,13 @@
 <template>
   <n-layout-sider
-    v-if="!route.meta.hideLayout && menuDefaultValue" class="h-100%" bordered show-trigger collapse-mode="width"
-    :collapsed-width="64" :width="240" :native-scrollbar="false" :collapsed="collapsed" @collapse="collapsed = true" @expand="collapsed = false"
+    v-if="!route.meta.hideLayout && menuDefaultValue" class="h-100%" bordered show-trigger
+    collapse-mode="width" :collapsed-width="64" :width="240" :native-scrollbar="false" :collapsed="collapsed"
+    @collapse="collapsed = true" @expand="collapsed = false"
   >
-    <n-menu :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" :default-value="menuDefaultValue" :collapsed="collapsed" />
+    <n-menu
+      :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" :default-value="menuDefaultValue"
+      :collapsed="collapsed"
+    />
   </n-layout-sider>
 </template>
 
@@ -61,6 +65,19 @@ if (!route.meta.hideLayout) {
         { default: () => '我的账单' },
       ),
       key: 'bill',
+      icon: () => h('i', { class: 'i-tabler-receipt' }),
+    },
+    {
+      label: () => h(
+        RouterLink,
+        {
+          to: {
+            name: 'BillAnalyticsView',
+          },
+        },
+        { default: () => '账单分析' },
+      ),
+      key: 'bill-analytics',
       icon: () => h('i', { class: 'i-tabler-receipt' }),
     },
     {
