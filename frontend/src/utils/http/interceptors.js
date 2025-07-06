@@ -2,6 +2,18 @@ import Bowser from 'bowser'
 import CryptoJS from 'crypto-js'
 import { request } from './request'
 
+let isRefreshing = false
+let refreshSubscribers = []
+
+function onRefreshed(newToken) {
+  refreshSubscribers.forEach(cb => cb(newToken))
+  refreshSubscribers = []
+}
+
+function addRefreshSubscriber(callback) {
+  refreshSubscribers.push(callback)
+}
+
 export function setupInterceptors(axiosInstance) {
   const SUCCESS_CODES = [0, 200]
   // 响应成功拦截器
@@ -14,38 +26,56 @@ export function setupInterceptors(axiosInstance) {
       }
       const code = data?.code ?? status
       if ([800001, 800002].includes(code)) {
-        // 刷新 token 逻辑
-        try {
+        if (!isRefreshing) {
+          isRefreshing = true
+
           const browser = Bowser.getParser(window.navigator.userAgent)
-          const res = await request.post('/auth/refresh', {
-            refresh_token: localStorage.getItem('refresh_token') || '',
-            browser_name: browser.getBrowserName(),
-            browser_version: browser.getBrowserVersion(),
-            engine_name: browser.getEngineName(),
-            os_name: browser.getOSName(),
-            os_version: browser.getOSVersion(),
-            platform_type: browser.getPlatformType(),
-            ua: browser.getUA(),
-          })
-          const access_token = res.data.access_token
-          const refresh_token = res.data.refresh_token
-          // 保存新 token
-          localStorage.setItem('token', access_token)
-          localStorage.setItem('refresh_token', refresh_token)
-          // 使用新 token 重发原始请求
-          return request(config)
+
+          return request
+            .post('/auth/refresh', {
+              refresh_token: localStorage.getItem('refresh_token') || '',
+              browser_name: browser.getBrowserName(),
+              browser_version: browser.getBrowserVersion(),
+              engine_name: browser.getEngineName(),
+              os_name: browser.getOSName(),
+              os_version: browser.getOSVersion(),
+              platform_type: browser.getPlatformType(),
+              ua: browser.getUA(),
+            })
+            .then((res) => {
+              const access_token = res.data.access_token
+              const refresh_token = res.data.refresh_token
+              localStorage.setItem('token', access_token)
+              localStorage.setItem('refresh_token', refresh_token)
+              // 更新 Authorization 默认值
+              axiosInstance.defaults.headers.Authorization = `Bearer ${access_token}`
+              onRefreshed(access_token)
+              return request(config)
+            })
+            .catch((err) => {
+              localStorage.removeItem('token')
+              localStorage.removeItem('refresh_token')
+              location.href = '/login'
+              return Promise.reject({
+                code,
+                message: '登录已过期，请重新登录',
+                error: err,
+              })
+            })
+            .finally(() => {
+              isRefreshing = false
+            })
         }
-        catch (err) {
-          localStorage.removeItem('token')
-          localStorage.removeItem('refresh_token')
-          location.href = '/login'
-          return Promise.reject({
-            code,
-            message: '登录已过期，请重新登录',
-            error: err,
+
+        // 如果正在刷新中，挂起请求，等待刷新完成后再重试
+        return new Promise((resolve) => {
+          addRefreshSubscriber((newToken) => {
+            config.headers.Authorization = `Bearer ${newToken}`
+            resolve(request(config))
           })
-        }
+        })
       }
+
       if ([800006, 800007, 800008].includes(code)) {
         localStorage.removeItem('token')
         localStorage.removeItem('refresh_token')
