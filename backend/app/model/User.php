@@ -2,9 +2,10 @@
 
 namespace app\model;
 
-use app\service\AdminAuthService;
+use Carbon\Carbon;
 use support\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use resource\enums\UserDashboardWidgetsEnums;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -54,6 +55,28 @@ class User extends Model
                     $model->password = sha1(sha1($model->password) . $model->salt);
                 }
             }
+        });
+
+        static::created(function ($model) {
+            // 添加默认组件
+            UserDashboardWidgets::insert([
+                [
+                    'user_id' => $model->id,
+                    'widget_id' => 1,
+                    'order_index' => 0,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ],
+                [
+                    'user_id' => $model->id,
+                    'widget_id' => 2,
+                    'order_index' => 1,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ]
+            ]);
         });
     }
 
