@@ -83,7 +83,11 @@ class Task
             'alipay' => [],
         ];
         // 连接邮件服务器
-        $inbox = @imap_open($mailbox, $username, $password);
+        try {
+            $inbox = @imap_open($mailbox, $username, $password);
+        } catch (\Exception $e) {
+            $inbox = false;
+        }
         if ($inbox === false) {
             $result['open'] = false;
             return $result;

@@ -3,6 +3,7 @@
 namespace app\controller;
 
 use app\model\BillRecords;
+use app\model\User;
 use support\Request;
 use Carbon\Carbon;
 use resource\enums\BillRecordsEnums;
@@ -11,6 +12,45 @@ use support\Response;
 
 class BillController
 {
+
+    /**
+     * 验证用户是否配置了 imap 以及 imap 是否有效
+     * 
+     * @return Response 
+     */
+    public function hasUserImapConfig(Request $request): Response
+    {
+        // 获取数据
+        $user = User::where('id', $request->uid)->first([
+            'mail_host' => 'mail_host',
+            'mail_username' => 'mail_username',
+            'mail_password' => 'mail_password',
+        ]);
+        if (empty($user)) {
+            return fail($request, 800010);
+        }
+        $billmail_config = false;
+        $imap_config = true;
+        if ($user->mail_host && $user->mail_username && $user->mail_password) {
+            $billmail_config = true;
+        }
+        if ($billmail_config) {
+            try {
+                $imap = @imap_open("{{$user->mail_host}}INBOX", $user->mail_username, $user->mail_password, OP_READONLY);
+            } catch (\Exception $e) {
+                $imap = false;
+            }
+            if ($imap === false) {
+                $imap_config = false;
+            }
+        }
+        // 返回数据
+        return success($request, [
+            'billmail_config' => $billmail_config,
+            'imap_config' => $imap_config
+        ]);
+    }
+
     /**
      * 获取账单搜索枚举信息
      * 

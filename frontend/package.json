@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --mode production",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,ts,vue}\"",
     "lint:fix": "eslint --fix"
