@@ -1,17 +1,17 @@
 <!-- 收入分类Top10 -->
 <template>
-  <div class="min-h-320px min-w-200px flex-1 opacity-0 duration-1500" :class="dataInit ? 'opacity-100' : ''">
+  <div class="min-h-380px min-w-400px flex-1 opacity-0 duration-1500" :class="dataInit ? 'opacity-100' : ''">
     <n-card
       class="max-w-full w-auto border border-gray-200 rounded-xl shadow-lg transition duration-300 dark:border-gray-700 dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
     >
       <div>
         <div class="mb-3 text-base font-medium">
-          <VChart :option="pieOption" autoresize class="min-h-320px min-w-200px flex-1" @click="onChartClick" />
+          <VChart :option="pieOption" autoresize class="min-h-380px min-w-400px flex-1" @click="onChartClick" />
         </div>
         <Transition name="fade-slide" mode="out-in">
           <div v-if="showBar" key="bar" class="mb-3 text-base font-medium">
             <VChart
-              :option="barOption" autoresize class="min-w-200px flex-1"
+              :option="barOption" autoresize class="min-w-400px flex-1"
               :style="{ minHeight: `${(barOption.yAxis.data.length * 30) + 100}px` }"
               @click="onChartClick"
             />
