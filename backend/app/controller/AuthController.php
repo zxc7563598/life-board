@@ -248,7 +248,11 @@ class AuthController
             return fail($request, 800010);
         }
         // 测试连接
-        $imap = @imap_open("{{$mail_host}}INBOX", $mail_username, $mail_password, OP_READONLY);
+        try {
+            $imap = @imap_open("{{$mail_host}}INBOX", $mail_username, $mail_password, OP_READONLY);
+        } catch (\Exception $e) {
+            $imap = false;
+        }
         if ($imap === false) {
             return fail($request, 800011);
         }

@@ -5,6 +5,8 @@ import UnoCSS from 'unocss/vite'
 import { defineConfig } from 'vite'
 import eslintPlugin from 'vite-plugin-eslint'
 
+const isDev = process.env.NODE_ENV !== 'production'
+
 export default defineConfig({
   resolve: {
     alias: {
@@ -22,11 +24,12 @@ export default defineConfig({
         }),
       ],
     }),
-    eslintPlugin({
-      fix: true,
-      include: ['src/**/*.js', 'src/**/*.vue'],
-    }),
-  ],
+    isDev &&
+      eslintPlugin({
+        fix: true,
+        include: ['src/**/*.js', 'src/**/*.vue'],
+      }),
+  ].filter(Boolean), // 过滤掉 false 插件
   build: {
     sourcemap: false,
   },
