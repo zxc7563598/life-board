@@ -73,7 +73,7 @@
                         {{ element.description }}
                       </div>
                       <n-button
-                        quaternary circle size="tiny" class="absolute right-2 top-2 z-10"
+                        circle quaternary size="tiny" class="absolute right-2 top-2 z-10"
                         @click.stop="removeItem(index)"
                       >
                         <template #icon>
