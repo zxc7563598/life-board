@@ -12,8 +12,7 @@
           <div v-if="showBar" key="bar" class="mb-3 text-base font-medium">
             <VChart
               :option="barOption" autoresize class="min-w-400px flex-1"
-              :style="{ minHeight: `${(barOption.yAxis.data.length * 30) + 100}px` }"
-              @click="onChartClick"
+              :style="{ minHeight: `${(barOption.yAxis.data.length * 30) + 100}px` }" @click="onChartClick"
             />
           </div>
         </Transition>
@@ -28,17 +27,18 @@
 
 <script setup>
 import { BarChart, PieChart } from 'echarts/charts'
-import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent } from 'echarts/components'
+import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components'
 import { use } from 'echarts/core'
 import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import VChart from 'vue-echarts'
 import BillDrawer from '@/components/BillAnalytics/BillDrawer.vue'
 import { request } from '@/utils/http/request'
 
 use([
   ToolboxComponent,
+  TooltipComponent,
   TitleComponent,
   LegendComponent,
   PieChart,
@@ -48,7 +48,44 @@ use([
   BarChart,
 ])
 
+const isDark = window.$isDark
+
 const dataInit = ref(false)
+
+const pieOptionColor = computed(() => ({
+  titleColor: isDark.value ? '#d6d6d6' : '#444',
+  legendColor: isDark.value ? '#bbbbbb' : '#666',
+  itemStyleColor: isDark.value ? '#1a1a1a' : '#fff',
+  labelColor: isDark.value ? '#d6d6d6' : '#444',
+  dataColor: isDark.value
+    ? [
+        '#6bd3ba',
+        '#7faeea',
+        '#688bb5',
+        '#d69cac',
+        '#d1a857',
+        '#999999',
+        '#a1c25d',
+        '#da9b7b',
+        '#7d97d6',
+        '#d69caf',
+      ]
+    : [
+        '#9cd5c2',
+        '#c5dafe',
+        '#b5c6e0',
+        '#fde2e2',
+        '#f9dcc4',
+        '#f6f5f5',
+        '#d0e6a5',
+        '#ffd3b6',
+        '#cddafd',
+        '#f8c8dc',
+      ],
+  tooltipBackgroundColor: isDark.value ? '#1a1a1a' : '#fff',
+  tooltipBorderColor: isDark.value ? '#333333' : '#eee',
+  tooltipColor: isDark.value ? '#cccccc' : '#333',
+}))
 
 const pieOption = ref({
   title: {
@@ -58,12 +95,19 @@ const pieOption = ref({
     textStyle: {
       fontSize: 14,
       fontWeight: 500,
-      color: '#444', // 深灰更柔和
+      color: pieOptionColor.value.titleColor,
     },
   },
   tooltip: {
     trigger: 'item',
     formatter: '{b}<br/>金额：¥{c}（{d}%）',
+    backgroundColor: pieOptionColor.value.tooltipBackgroundColor,
+    borderColor: pieOptionColor.value.tooltipBorderColor,
+    borderWidth: 1,
+    textStyle: {
+      color: pieOptionColor.value.tooltipColor,
+      fontSize: 12,
+    },
   },
   legend: {
     top: 'bottom',
@@ -71,7 +115,7 @@ const pieOption = ref({
     itemHeight: 10,
     textStyle: {
       fontSize: 12,
-      color: '#666',
+      color: pieOptionColor.value.legendColor,
     },
   },
   toolbox: {
@@ -86,29 +130,31 @@ const pieOption = ref({
       roseType: 'area',
       itemStyle: {
         borderRadius: 6,
-        borderColor: '#fff',
+        borderColor: pieOptionColor.value.itemStyleColor,
         borderWidth: 2,
       },
       label: {
-        color: '#444',
+        color: pieOptionColor.value.labelColor,
         fontSize: 12,
       },
       data: [],
-      color: [
-        '#9cd5c2',
-        '#c5dafe',
-        '#b5c6e0',
-        '#fde2e2',
-        '#f9dcc4',
-        '#f6f5f5',
-        '#d0e6a5',
-        '#ffd3b6',
-        '#cddafd',
-        '#f8c8dc',
-      ],
+      color: pieOptionColor.value.dataColor,
     },
   ],
 })
+
+const barOptionColor = computed(() => ({
+  titleColor: isDark.value ? '#d6d6d6' : '#444',
+  tooltipBackgroundColor: isDark.value ? '#1a1a1a' : '#fff',
+  tooltipBorderColor: isDark.value ? '#333333' : '#eee',
+  tooltipColor: isDark.value ? '#cccccc' : '#333',
+  xAxisAxisLineColor: isDark.value ? '#444444' : '#ddd',
+  xAxisSplitLineColor: isDark.value ? '#333333' : '#eee',
+  xAxisAxisLabelColor: isDark.value ? '#bbbbbb' : '#666',
+  yAxisAxisLabelColor: isDark.value ? '#bbbbbb' : '#666',
+  color: isDark.value ? '#6bb3b3' : '#aad9d9',
+  seriesLabelColor: isDark.value ? '#cccccc' : '#555',
+}))
 
 const barOption = ref({
   title: {
@@ -118,7 +164,7 @@ const barOption = ref({
     textStyle: {
       fontSize: 15,
       fontWeight: 500,
-      color: '#444', // 柔和字体色
+      color: barOptionColor.value.titleColor,
     },
   },
   tooltip: {
@@ -126,11 +172,11 @@ const barOption = ref({
     axisPointer: {
       type: 'shadow',
     },
-    backgroundColor: '#fff',
-    borderColor: '#eee',
+    backgroundColor: barOptionColor.value.tooltipBackgroundColor,
+    borderColor: barOptionColor.value.tooltipBorderColor,
     borderWidth: 1,
     textStyle: {
-      color: '#333',
+      color: barOptionColor.value.tooltipColor,
       fontSize: 12,
     },
   },
@@ -143,18 +189,18 @@ const barOption = ref({
   },
   xAxis: {
     type: 'value',
-    axisLine: { lineStyle: { color: '#ddd' } },
-    splitLine: { lineStyle: { color: '#eee' } },
-    axisLabel: { color: '#666' },
+    axisLine: { lineStyle: { color: barOptionColor.value.xAxisAxisLineColor } },
+    splitLine: { lineStyle: { color: barOptionColor.value.xAxisSplitLineColor } },
+    axisLabel: { color: barOptionColor.value.xAxisAxisLabelColor },
   },
   yAxis: {
     type: 'category',
     data: [],
     axisLine: { show: false },
     axisTick: { show: false },
-    axisLabel: { color: '#666' },
+    axisLabel: { color: barOptionColor.value.yAxisAxisLabelColor },
   },
-  color: ['#aad9d9'], // 统一淡色调
+  color: [barOptionColor.value.color],
   series: [
     {
       name: '金额',
@@ -167,11 +213,33 @@ const barOption = ref({
       label: {
         show: true,
         position: 'right',
-        color: '#555',
+        color: barOptionColor.value.seriesLabelColor,
         fontSize: 12,
       },
     },
   ],
+})
+
+watch(isDark, () => {
+  pieOption.value.title.textStyle.color = pieOptionColor.value.titleColor
+  pieOption.value.legend.textStyle.color = pieOptionColor.value.legendColor
+  pieOption.value.tooltip.backgroundColor = barOptionColor.value.tooltipBackgroundColor
+  pieOption.value.tooltip.borderColor = barOptionColor.value.tooltipBorderColor
+  pieOption.value.tooltip.textStyle.color = barOptionColor.value.tooltipColor
+  pieOption.value.series[0].itemStyle.borderColor = pieOptionColor.value.itemStyleColor
+  pieOption.value.series[0].label.color = pieOptionColor.value.labelColor
+  pieOption.value.series[0].color = pieOptionColor.value.dataColor
+
+  barOption.value.title.textStyle.color = barOptionColor.value.titleColor
+  barOption.value.tooltip.backgroundColor = barOptionColor.value.tooltipBackgroundColor
+  barOption.value.tooltip.borderColor = barOptionColor.value.tooltipBorderColor
+  barOption.value.tooltip.textStyle.color = barOptionColor.value.tooltipColor
+  barOption.value.xAxis.axisLine.lineStyle.color = barOptionColor.value.xAxisAxisLineColor
+  barOption.value.xAxis.splitLine.lineStyle.color = barOptionColor.value.xAxisSplitLineColor
+  barOption.value.xAxis.axisLabel.color = barOptionColor.value.xAxisAxisLabelColor
+  barOption.value.yAxis.axisLabel.color = barOptionColor.value.yAxisAxisLabelColor
+  barOption.value.color[0] = barOptionColor.value.color
+  barOption.value.series[0].label.color = barOptionColor.value.seriesLabelColor
 })
 
 // 控制条形图是否显示
