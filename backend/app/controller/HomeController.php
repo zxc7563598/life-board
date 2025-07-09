@@ -7,6 +7,7 @@ use support\Response;
 use app\model\DashboardWidgets;
 use app\model\UserDashboardWidgets;
 use resource\enums\DashboardWidgetsEnums;
+use resource\enums\UserDashboardWidgetsEnums;
 
 class HomeController
 {
@@ -60,13 +61,15 @@ class HomeController
         // 删除用户先前配置
         UserDashboardWidgets::where('user_id', $request->uid)->delete();
         // 为用户添加新的配置
+        $index = 1;
         foreach ($widgets as $_widgets) {
             $user_dashboard_widgets = new UserDashboardWidgets();
             $user_dashboard_widgets->user_id = $request->uid;
             $user_dashboard_widgets->widget_id = $_widgets['widget_id'];
-            $user_dashboard_widgets->order_index = $_widgets['order_index'];
-            $user_dashboard_widgets->is_active = $_widgets['is_active'];
+            $user_dashboard_widgets->order_index = $index;
+            $user_dashboard_widgets->is_active = UserDashboardWidgetsEnums\IsActive::Enable->value;
             $user_dashboard_widgets->save();
+            $index++;
         }
         // 返回数据
         return success($request, []);
