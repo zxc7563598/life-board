@@ -62,8 +62,16 @@ class User extends Model
             UserDashboardWidgets::insert([
                 [
                     'user_id' => $model->id,
+                    'widget_id' => 6,
+                    'order_index' => 1,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ],
+                [
+                    'user_id' => $model->id,
                     'widget_id' => 1,
-                    'order_index' => 0,
+                    'order_index' => 2,
                     'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
                     'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
                     'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
@@ -71,7 +79,7 @@ class User extends Model
                 [
                     'user_id' => $model->id,
                     'widget_id' => 2,
-                    'order_index' => 1,
+                    'order_index' => 3,
                     'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
                     'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
                     'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
