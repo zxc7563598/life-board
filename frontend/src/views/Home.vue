@@ -1,18 +1,54 @@
 <template>
-  <div class="min-h-100% flex items-center justify-center bg-[#f9fafb] dark:bg-[#121212]">
-    <n-card
-      class="w-auto border border-gray-200 rounded-xl py-5 shadow-lg transition-opacity duration-1500 dark:border-gray-700 dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
-    >
-      欢迎你，我的朋友，目前功能还在开发中，敬请期待
-    </n-card>
+  <div class="min-h-100% bg-[#f9fafb] px-4 py-4 dark:bg-[#121212]">
+    <div class="flex flex-wrap gap-4">
+      <component :is="widgetMap[item]" v-for="(item, index) in widgets" :key="index" />
+    </div>
   </div>
 </template>
 
 <script setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import ExpenseCategoryTop10 from '@/components/BillAnalytics/ExpenseCategoryTop10.vue'
+import IncomeCategoryTop10 from '@/components/BillAnalytics/IncomeCategoryTop10.vue'
+import IncomeExpenseOverview from '@/components/BillAnalytics/IncomeExpenseOverview.vue'
+import BillModuleGuide from '@/components/Home/BillModuleGuide.vue'
+import RealTimeClockCard from '@/components/Home/RealTimeClockCard.vue'
+import WelcomeMessage from '@/components/Home/WelcomeMessage.vue'
+import eventBus from '@/utils/event-bus'
+import { request } from '@/utils/http/request'
+
 defineOptions({
   name: 'HomeView',
 })
 
 const emit = defineEmits(['setDefaultValue'])
 emit('setDefaultValue', 'home')
+
+const widgets = ref([])
+
+const widgetMap = {
+  RealTimeClockCard,
+  WelcomeMessage,
+  BillModuleGuide,
+  ExpenseCategoryTop10,
+  IncomeCategoryTop10,
+  IncomeExpenseOverview,
+}
+
+function refreshData() {
+  request.post('/home/get-user-widgets').then(({ code, data }) => {
+    if (code === 0) {
+      widgets.value = data.user_widgets
+    }
+  })
+}
+
+onMounted(() => {
+  refreshData()
+  eventBus.on('refresh-home-view', refreshData)
+})
+
+onBeforeUnmount(() => {
+  eventBus.off('refresh-home-view', refreshData)
+})
 </script>

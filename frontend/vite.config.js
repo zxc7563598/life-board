@@ -24,11 +24,11 @@ export default defineConfig({
         }),
       ],
     }),
-    isDev &&
-      eslintPlugin({
-        fix: true,
-        include: ['src/**/*.js', 'src/**/*.vue'],
-      }),
+    isDev
+    && eslintPlugin({
+      fix: true,
+      include: ['src/**/*.js', 'src/**/*.vue'],
+    }),
   ].filter(Boolean), // 过滤掉 false 插件
   build: {
     sourcemap: false,

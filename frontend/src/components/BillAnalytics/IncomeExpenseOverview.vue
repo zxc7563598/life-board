@@ -1,6 +1,6 @@
 <!-- 收入分类Top10 -->
 <template>
-  <div class="min-h-400px min-w-full flex-1 opacity-0 duration-1500" :class="dataInit ? 'opacity-100' : ''">
+  <div class="min-h-400px min-w-800px flex-1 opacity-0 duration-1500" :class="dataInit ? 'opacity-100' : ''">
     <n-card
       class="max-w-full w-full border border-gray-200 rounded-xl shadow-lg transition duration-300 dark:border-gray-700 dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
     >
@@ -20,7 +20,7 @@ import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, Toolt
 import { use } from 'echarts/core'
 import { LabelLayout, UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import VChart from 'vue-echarts'
 import BillDrawer from '@/components/BillAnalytics/BillDrawer.vue'
 import { request } from '@/utils/http/request'
@@ -37,7 +37,23 @@ use([
   LabelLayout,
 ])
 
+const isDark = window.$isDark
+
 const dataInit = ref(false)
+
+const lineOptionColor = computed(() => ({
+  titleColor: isDark.value ? '#d6d6d6' : '#444',
+  tooltipBackgroundColor: isDark.value ? '#1a1a1a' : '#fff',
+  tooltipBorderColor: isDark.value ? '#333333' : '#eee',
+  tooltipColor: isDark.value ? '#cccccc' : '#333',
+  legendColor: isDark.value ? '#bbbbbb' : '#666',
+  xAxisAxisLineColor: isDark.value ? '#444444' : '#ddd',
+  xAxisAxisLabelColor: isDark.value ? '#bbbbbb' : '#666',
+  yAxisSplitLineColor: isDark.value ? '#cccccc' : '#eee',
+  yAxisAxisLabelColor: isDark.value ? '#bbbbbb' : '#666',
+  color: isDark.value ? ['#6bd3ba', '#d69caf'] : ['#9cd5c2', '#f8c8dc'],
+  seriesColor: isDark.value ? ['rgba(107, 211, 186, 0.25)', 'rgba(214, 156, 175, 0.25)'] : ['rgba(156, 213, 194, 0.2)', 'rgba(248, 200, 220, 0.2)'],
+}))
 
 const lineOption = ref({
   title: {
@@ -47,16 +63,16 @@ const lineOption = ref({
     textStyle: {
       fontSize: 15,
       fontWeight: 500,
-      color: '#444', // 柔和字体色
+      color: lineOptionColor.value.titleColor,
     },
   },
   tooltip: {
     trigger: 'axis',
-    backgroundColor: '#fff',
-    borderColor: '#eee',
+    backgroundColor: lineOptionColor.value.tooltipBackgroundColor,
+    borderColor: lineOptionColor.value.tooltipBorderColor,
     borderWidth: 1,
     textStyle: {
-      color: '#333',
+      color: lineOptionColor.value.tooltipColor,
       fontSize: 12,
     },
   },
@@ -65,7 +81,7 @@ const lineOption = ref({
     top: 10,
     right: 10,
     textStyle: {
-      color: '#666',
+      color: lineOptionColor.value.legendColor,
       fontSize: 12,
     },
   },
@@ -80,16 +96,16 @@ const lineOption = ref({
     type: 'category',
     boundaryGap: false,
     data: [],
-    axisLine: { lineStyle: { color: '#ddd' } },
-    axisLabel: { color: '#666' },
+    axisLine: { lineStyle: { color: lineOptionColor.value.xAxisAxisLineColor } },
+    axisLabel: { color: lineOptionColor.value.xAxisAxisLabelColor },
   },
   yAxis: {
     type: 'value',
     axisLine: { show: false },
-    splitLine: { lineStyle: { color: '#eee' } },
-    axisLabel: { color: '#666' },
+    splitLine: { lineStyle: { color: lineOptionColor.value.yAxisSplitLineColor } },
+    axisLabel: { color: lineOptionColor.value.yAxisAxisLabelColor },
   },
-  color: ['#9cd5c2', '#f8c8dc'], // 柔和的收入 / 支出配色
+  color: [lineOptionColor.value.color[0], lineOptionColor.value.color[1]], // 柔和的收入 / 支出配色
   series: [
     {
       name: '收入',
@@ -100,7 +116,7 @@ const lineOption = ref({
       data: [],
       lineStyle: { width: 2 },
       areaStyle: {
-        color: 'rgba(156, 213, 194, 0.2)',
+        color: lineOptionColor.value.seriesColor[0],
       },
     },
     {
@@ -112,10 +128,25 @@ const lineOption = ref({
       data: [],
       lineStyle: { width: 2 },
       areaStyle: {
-        color: 'rgba(248, 200, 220, 0.2)',
+        color: lineOptionColor.value.seriesColor[1],
       },
     },
   ],
+})
+
+watch(isDark, () => {
+  lineOption.value.title.textStyle.color = lineOptionColor.value.titleColor
+  lineOption.value.tooltip.backgroundColor = lineOptionColor.value.tooltipBackgroundColor
+  lineOption.value.tooltip.borderColor = lineOptionColor.value.tooltipBorderColor
+  lineOption.value.tooltip.textStyle.color = lineOptionColor.value.tooltipColor
+  lineOption.value.legend.textStyle.color = lineOptionColor.value.legendColor
+  lineOption.value.xAxis.axisLine.lineStyle.color = lineOptionColor.value.xAxisAxisLineColor
+  lineOption.value.xAxis.axisLabel.color = lineOptionColor.value.xAxisAxisLabelColor
+  lineOption.value.yAxis.splitLine.lineStyle.color = lineOptionColor.value.yAxisSplitLineColor
+  lineOption.value.yAxis.axisLabel.color = lineOptionColor.value.yAxisAxisLabelColor
+  lineOption.value.color = lineOptionColor.value.color
+  lineOption.value.series[0].areaStyle.color = lineOptionColor.value.seriesColor[0]
+  lineOption.value.series[1].areaStyle.color = lineOptionColor.value.seriesColor[1]
 })
 
 const lineData = ref([])

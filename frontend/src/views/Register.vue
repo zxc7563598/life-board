@@ -48,7 +48,7 @@ import bgUrl from '@/assets/register/bg.png'
 import { request } from '@/utils/http/request'
 
 defineOptions({
-  name: 'LoginView',
+  name: 'RegisterView',
 })
 
 const router = useRouter()
