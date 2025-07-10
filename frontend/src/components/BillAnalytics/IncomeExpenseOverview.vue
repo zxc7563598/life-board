@@ -1,6 +1,6 @@
 <!-- 收入分类Top10 -->
 <template>
-  <div class="min-h-400px min-w-full flex-1 opacity-0 duration-1500" :class="dataInit ? 'opacity-100' : ''">
+  <div class="min-h-400px min-w-800px flex-1 opacity-0 duration-1500" :class="dataInit ? 'opacity-100' : ''">
     <n-card
       class="max-w-full w-full border border-gray-200 rounded-xl shadow-lg transition duration-300 dark:border-gray-700 dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)]"
     >
