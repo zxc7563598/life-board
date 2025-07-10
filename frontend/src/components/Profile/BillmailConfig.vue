@@ -46,7 +46,9 @@
             <n-input v-model:value="model.mail_password" size="medium" round placeholder="密码或者授权码" />
             <template #feedback>
               <div style="font-size: 12px; color: #888;">
-                <p>如使用 QQ、163、Gmail 等邮箱，请前往邮箱设置中开启 IMAP 并生成授权码</p>
+                <p>确保已开启 IMAP/SMTP 服务，并使用“授权码”作为密码登录。</p>
+                <p>如使用 QQ、163、Gmail 等邮箱，请前往邮箱【设置 → 账户 → 开启服务 → 获取授权码】中开启 IMAP 并生成授权码</p>
+                <p>授权码不同于登录密码。建议使用常用邮箱并保持可用状态。</p>
                 <p>
                   以QQ邮箱为例，授权码获取方式可以参考：<a
                     href="https://wx.mail.qq.com/list/readtemplate?name=app_intro.html#/agreement/authorizationCode"

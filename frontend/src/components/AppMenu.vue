@@ -52,33 +52,40 @@ if (!route.meta.hideLayout) {
         { default: () => '首页' },
       ),
       key: 'home',
-      icon: () => h('i', { class: 'i-tabler-home' }),
+      icon: () => h('i', { class: 'i-tabler-layout-board-split' }),
     },
     {
-      label: () => h(
-        RouterLink,
+      label: '我的账单',
+      key: 'my-bill',
+      icon: () => h('i', { class: 'i-tabler-report-money' }),
+      children: [
         {
-          to: {
-            name: 'BillView',
-          },
+          label: () => h(
+            RouterLink,
+            {
+              to: {
+                name: 'BillView',
+              },
+            },
+            { default: () => '账单列表' },
+          ),
+          key: 'bill',
+          icon: () => h('i', { class: 'i-tabler-receipt' }),
         },
-        { default: () => '我的账单' },
-      ),
-      key: 'bill',
-      icon: () => h('i', { class: 'i-tabler-receipt' }),
-    },
-    {
-      label: () => h(
-        RouterLink,
         {
-          to: {
-            name: 'BillAnalyticsView',
-          },
+          label: () => h(
+            RouterLink,
+            {
+              to: {
+                name: 'BillAnalyticsView',
+              },
+            },
+            { default: () => '账单分析' },
+          ),
+          key: 'bill-analytics',
+          icon: () => h('i', { class: 'i-tabler-percentage-60' }),
         },
-        { default: () => '账单分析' },
-      ),
-      key: 'bill-analytics',
-      icon: () => h('i', { class: 'i-tabler-receipt' }),
+      ],
     },
     {
       key: 'divider-1',
