@@ -16,11 +16,11 @@ import IncomeExpenseOverview from '@/components/BillAnalytics/IncomeExpenseOverv
 import { request } from '@/utils/http/request'
 
 defineOptions({
-  name: 'ProfileView',
+  name: 'BillAnalyticsView',
 })
 
 const emit = defineEmits(['setDefaultValue'])
-emit('setDefaultValue', 'profile')
+emit('setDefaultValue', 'bill-analytics')
 
 const show = ref([false, false, false])
 onMounted(async () => {

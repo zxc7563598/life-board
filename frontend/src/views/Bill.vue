@@ -12,7 +12,7 @@ import BillTable from '@/components/Bill/BillTable.vue'
 import { request } from '@/utils/http/request'
 
 defineOptions({
-  name: 'HomeView',
+  name: 'BillView',
 })
 
 const emit = defineEmits(['setDefaultValue'])
