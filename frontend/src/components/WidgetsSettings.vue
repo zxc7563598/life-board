@@ -58,10 +58,7 @@
                 我的组件 {{ userWidgetsList.length }}
               </div>
               <div class="min-h-0 flex-1 overflow-hidden overflow-y-auto p-2">
-                <draggable
-                  v-model="userWidgetsList" item-key="id" group="tasks"
-                  class="min-h-100% min-w-100%"
-                >
+                <draggable v-model="userWidgetsList" item-key="id" group="tasks" class="min-h-100% min-w-100%">
                   <template #item="{ element, index }">
                     <n-card
                       class="mb-2 w-full border border-gray-200 rounded-xl bg-[#f9fafb] shadow-lg transition dark:border-gray-700 hover:border-blue-400 dark:bg-[#121212] hover:bg-[#eef4ff] dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)] hover:shadow-xl dark:hover:border-blue-500 dark:hover:bg-[#1e1e1e] dark:hover:shadow-[0_4px_16px_rgba(0,0,0,0.6)]"
@@ -87,9 +84,14 @@
             </div>
           </n-card>
         </div>
-        <n-button strong secondary round type="primary" class="w-full" @click="saveWidgets">
-          保存
-        </n-button>
+        <div class="w-full flex">
+          <n-button strong secondary round class="flex-1" @click="defaultWidgets">
+            恢复默认
+          </n-button>
+          <n-button strong secondary round type="primary" class="ml-2 flex-1" @click="saveWidgets">
+            保存
+          </n-button>
+        </div>
       </div>
     </n-drawer-content>
   </n-drawer>
@@ -181,5 +183,20 @@ async function saveWidgets() {
       eventBus.emit('refresh-home-view')
     }
   }
+}
+
+// 恢复默认组件设置
+function defaultWidgets() {
+  const user_widgets = [
+    'RealTimeClockCard',
+    'WelcomeMessage',
+    'BillModuleGuide',
+  ]
+  userWidgetsList.value = []
+  user_widgets.forEach((component_key) => {
+    if (widgets.value[component_key]) {
+      userWidgetsList.value.push(widgets.value[component_key])
+    }
+  })
 }
 </script>
