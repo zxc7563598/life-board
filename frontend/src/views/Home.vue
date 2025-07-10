@@ -12,6 +12,7 @@ import ExpenseCategoryTop10 from '@/components/BillAnalytics/ExpenseCategoryTop1
 import IncomeCategoryTop10 from '@/components/BillAnalytics/IncomeCategoryTop10.vue'
 import IncomeExpenseOverview from '@/components/BillAnalytics/IncomeExpenseOverview.vue'
 import BillModuleGuide from '@/components/Home/BillModuleGuide.vue'
+import RealTimeClockCard from '@/components/Home/RealTimeClockCard.vue'
 import WelcomeMessage from '@/components/Home/WelcomeMessage.vue'
 import eventBus from '@/utils/event-bus'
 import { request } from '@/utils/http/request'
@@ -26,6 +27,7 @@ emit('setDefaultValue', 'home')
 const widgets = ref([])
 
 const widgetMap = {
+  RealTimeClockCard,
   WelcomeMessage,
   BillModuleGuide,
   ExpenseCategoryTop10,
