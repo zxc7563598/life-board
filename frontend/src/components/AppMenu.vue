@@ -88,6 +88,26 @@ if (!route.meta.hideLayout) {
       ],
     },
     {
+      label: '我的待办',
+      key: 'my-todo',
+      icon: () => h('i', { class: 'i-tabler-align-box-left-stretch' }),
+      children: [
+        {
+          label: () => h(
+            RouterLink,
+            {
+              to: {
+                name: 'TodoListView',
+              },
+            },
+            { default: () => '待办清单' },
+          ),
+          key: 'todo-list',
+          icon: () => h('i', { class: 'i-tabler-list-check' }),
+        },
+      ],
+    },
+    {
       key: 'divider-1',
       type: 'divider',
     },
