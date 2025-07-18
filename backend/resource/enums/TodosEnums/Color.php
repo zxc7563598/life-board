@@ -7,26 +7,26 @@ namespace resource\enums\TodosEnums;
  */
 enum Color: int
 {
-    case MintGreen = 0; // 薄荷绿
-    case SkyBlue = 1; // 天空蓝
-    case SteelBlue = 1; // 钢铁蓝
-    case RosePink = 1; // 玫瑰粉
-    case CaramelGold = 1; // 焦糖金
-    case NeutralGray = 1; // 中性灰
-    case AppleGreen = 1; // 苹果绿
-    case CinnamonOrange = 1; // 肉桂橘
-    case IndigoPurple = 1; // 靛蓝紫
-    case CoralPink = 1; // 珊瑚粉
-    case DeepTeal = 1; // 暗绿蓝
-    case CoolBlueGray = 1; // 冷蓝灰
-    case VintageMauve = 1; // 复古粉紫
-    case GoldenBrown = 1; // 黄棕
-    case DarkNeutralGray = 1; // 深中性灰
-    case DeepGrassGreen = 1; // 深草绿
-    case BrickRed = 1; // 砖红
-    case DeepIndigo = 1; // 深蓝紫
-    case DarkRosePink = 1; // 暗玫瑰粉
-    case SoftPlumRed = 1; // 柔紫红
+    case MintGreen = 1; // 薄荷绿
+    case SkyBlue = 2; // 天空蓝
+    case SteelBlue = 3; // 钢铁蓝
+    case RosePink = 4; // 玫瑰粉
+    case CaramelGold = 5; // 焦糖金
+    case NeutralGray = 6; // 中性灰
+    case AppleGreen = 7; // 苹果绿
+    case CinnamonOrange = 8; // 肉桂橘
+    case IndigoPurple = 9; // 靛蓝紫
+    case CoralPink = 10; // 珊瑚粉
+    case DeepTeal = 11; // 暗绿蓝
+    case CoolBlueGray = 12; // 冷蓝灰
+    case VintageMauve = 13; // 复古粉紫
+    case GoldenBrown = 14; // 黄棕
+    case DarkNeutralGray = 15; // 深中性灰
+    case DeepGrassGreen = 16; // 深草绿
+    case BrickRed = 17; // 砖红
+    case DeepIndigo = 18; // 深蓝紫
+    case DarkRosePink = 19; // 暗玫瑰粉
+    case SoftPlumRed = 20; // 柔紫红
 
     public function label(): string
     {
