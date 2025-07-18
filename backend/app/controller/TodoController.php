@@ -32,7 +32,7 @@ class TodoController
     /**
      * 变更清单分类
      * 
-     * @param integer $id 清单分类ID
+     * @param integer $category_id 清单分类ID
      * @param string $name 清单名称
      * 
      * @return Response 
@@ -40,12 +40,12 @@ class TodoController
     public function updateTodoCategory(Request $request): Response
     {
         // 获取参数
-        $id = $request->data['id'] ?? null;
+        $category_id = $request->data['category_id'] ?? null;
         $name = $request->data['name'];
         // 获取数据
         $todo_categories = new TodoCategories();
-        if (!is_null($id)) {
-            $todo_categories = TodoCategories::where('user_id', $request->uid)->where('id', $id)->first();
+        if (!is_null($category_id)) {
+            $todo_categories = TodoCategories::where('user_id', $request->uid)->where('id', $category_id)->first();
             if (empty($todo_categories)) {
                 return fail($request, 800012);
             }
@@ -60,21 +60,21 @@ class TodoController
     /**
      * 删除清单分类
      * 
-     * @param integer $id 清单分类ID
+     * @param integer $category_id 清单分类ID
      * 
      * @return Response 
      */
     public function deleteTodoCategory(Request $request): Response
     {
         // 获取参数
-        $id = $request->data['id'];
+        $category_id = $request->data['category_id'];
         // 进行删除
-        $todo_categories = TodoCategories::where('user_id', $request->uid)->where('id', $id)->first();
+        $todo_categories = TodoCategories::where('user_id', $request->uid)->where('id', $category_id)->first();
         if (empty($todo_categories)) {
             return fail($request, 800012);
         }
         // 去除待办事件的分类
-        Todos::where('user_id', $request->uid)->where('category_id', $id)->update([
+        Todos::where('user_id', $request->uid)->where('category_id', $category_id)->update([
             'category_id' => null
         ]);
         $todo_categories->delete();
@@ -335,4 +335,7 @@ class TodoController
         // 返回成功
         return success($request, []);
     }
+
+    // // 获取待办日历信息
+    // public function getTodoCalendar(Request $request): Response{}
 }

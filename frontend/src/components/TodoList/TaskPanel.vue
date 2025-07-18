@@ -250,7 +250,7 @@ function handleCategoriesAction(key, item) {
         if (index !== -1) {
           labelMenuOptions.value.splice(index, 1)
         }
-        request.post('/todo/delete-todo-category', { id: item.id }).then(({ code }) => {
+        request.post('/todo/delete-todo-category', { category_id: item.id }).then(({ code }) => {
           if (code === 0) {
             window.$message.success('删除成功')
             getTodoCategories()
@@ -268,7 +268,7 @@ function handleCategorySave(item) {
   editingId.value = null
   if (item.name !== editingValue.value) {
     item.name = editingValue.value
-    request.post('/todo/update-todo-category', { id: item.id, name: editingValue.value }).then(({ code }) => {
+    request.post('/todo/update-todo-category', { category_id: item.id, name: editingValue.value }).then(({ code }) => {
       if (code === 0) {
         window.$message.success('修改成功')
         getTodoCategories()
