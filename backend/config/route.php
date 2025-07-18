@@ -35,6 +35,16 @@ Route::group('/api', function () {
     Route::post('/bill/get-income-categories', [controller\BillController::class, 'getIncomeCategories'])->name('[获取收入分类]');
     Route::post('/bill/get-expense-categories', [controller\BillController::class, 'getExpenseCategories'])->name('[获取支出分类]');
     Route::post('/bill/get-financial-summary', [controller\BillController::class, 'getFinancialSummary'])->name('[获取阶段收支信息]');
+
+    Route::post('/todo/get-todo-categories', [controller\TodoController::class, 'getTodoCategories'])->name('[获取清单分类]');
+    Route::post('/todo/update-todo-category', [controller\TodoController::class, 'updateTodoCategory'])->name('[变更清单分类]');
+    Route::post('/todo/delete-todo-category', [controller\TodoController::class, 'deleteTodoCategory'])->name('[删除清单分类]');
+    Route::post('/todo/list-todos', [controller\TodoController::class, 'listTodos'])->name('[获取待办事项列表]');
+    Route::post('/todo/get-todo', [controller\TodoController::class, 'getTodo'])->name('[获取单条待办事项]');
+    Route::post('/todo/save-todo', [controller\TodoController::class, 'saveTodo'])->name('[存储待办事项]');
+    Route::post('/todo/delete-todo', [controller\TodoController::class, 'deleteTodo'])->name('[删除待办事项]');
+    Route::post('/todo/complete-todo', [controller\TodoController::class, 'completeTodo'])->name('[完成待办事项]');
+    Route::post('/todo/uncomplete-todo', [controller\TodoController::class, 'uncompleteTodo'])->name('[取消完成待办事项]');
 })->middleware([
     app\middleware\AccessMiddleware::class,
     app\middleware\LangMiddleware::class,
