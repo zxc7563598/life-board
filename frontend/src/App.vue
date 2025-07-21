@@ -3,23 +3,25 @@
     :theme="theme" :theme-overrides="themeOverrides" :class="{ dark: isDark }" :locale="zhCN"
     :date-locale="dateZhCN"
   >
-    <n-message-provider>
-      <n-layout>
-        <div class="h-100vh flex flex-col">
-          <AppHeader />
-          <n-layout has-sider class="flex-1">
-            <AppMenu :default-value="defaultValue" />
-            <n-layout class="h-100%">
-              <router-view v-slot="{ Component }">
-                <transition name="fade" mode="out-in">
-                  <component :is="Component" @set-default-value="onSetDefaultValue" />
-                </transition>
-              </router-view>
+    <n-dialog-provider>
+      <n-message-provider>
+        <n-layout>
+          <div class="h-screen flex flex-col">
+            <AppHeader />
+            <n-layout has-sider class="flex-1">
+              <AppMenu :default-value="defaultValue" />
+              <n-layout class="h-100%">
+                <router-view v-slot="{ Component }">
+                  <transition name="fade" mode="out-in">
+                    <component :is="Component" @set-default-value="onSetDefaultValue" />
+                  </transition>
+                </router-view>
+              </n-layout>
             </n-layout>
-          </n-layout>
-        </div>
-      </n-layout>
-    </n-message-provider>
+          </div>
+        </n-layout>
+      </n-message-provider>
+    </n-dialog-provider>
   </n-config-provider>
 </template>
 

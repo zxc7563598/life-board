@@ -38,7 +38,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 /* latin */
 @font-face {
   font-family: 'Orbitron';
