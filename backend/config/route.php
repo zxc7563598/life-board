@@ -45,6 +45,7 @@ Route::group('/api', function () {
     Route::post('/todo/delete-todo', [controller\TodoController::class, 'deleteTodo'])->name('[删除待办事项]');
     Route::post('/todo/complete-todo', [controller\TodoController::class, 'completeTodo'])->name('[完成待办事项]');
     Route::post('/todo/uncomplete-todo', [controller\TodoController::class, 'uncompleteTodo'])->name('[取消完成待办事项]');
+    Route::post('/todo/get-todo-calendar', [controller\TodoController::class, 'getTodoCalendar'])->name('[获取待办日历信息]');
 })->middleware([
     app\middleware\AccessMiddleware::class,
     app\middleware\LangMiddleware::class,

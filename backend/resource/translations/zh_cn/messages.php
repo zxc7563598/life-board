@@ -35,6 +35,9 @@ return [
     "Deep Indigo" => "深蓝紫",
     "Dark Rose Pink" => "暗玫瑰粉",
     "Soft Plum Red" => "柔紫红",
+    "Solar Term" => "节气",
+    "Festival" => "节日",
+    "MinorFestival" => "小节日",
 
     "success" => "成功",
 

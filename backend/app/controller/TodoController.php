@@ -2,12 +2,14 @@
 
 namespace app\controller;
 
+use app\model\CalendarHolidays;
 use support\Request;
 use support\Response;
 use app\model\TodoCategories;
 use app\model\Todos;
 use Carbon\Carbon;
 use resource\enums\TodosEnums;
+use resource\enums\CalendarHolidaysEnums;
 
 class TodoController
 {
@@ -158,10 +160,14 @@ class TodoController
                 'color' => 'color',
                 'start_at' => 'start_at',
                 'end_at' => 'end_at',
+                'completed' => 'completed',
                 'repeat_type' => 'repeat_type',
                 'repeat_interval' => 'repeat_interval',
                 'repeat_until' => 'repeat_until'
             ]);
+            if (!empty($todos)) {
+                $todos->completed = $todos->completed == TodosEnums\Completed::Yes->value;
+            }
         }
         // 获取用户分类
         $todo_categories = TodoCategories::where('user_id', $request->uid)->get([
@@ -336,6 +342,104 @@ class TodoController
         return success($request, []);
     }
 
-    // // 获取待办日历信息
-    // public function getTodoCalendar(Request $request): Response{}
+    /**
+     * 获取待办日历信息
+     * 
+     * @param integer $year 年份
+     * @param integer $month 月份
+     * 
+     * @return Response 
+     */
+    public function getTodoCalendar(Request $request): Response
+    {
+        // 获取参数
+        $year = $request->data['year'] ?? Carbon::now()->timezone(config('app.default_timezone'))->format('Y');
+        $month = $request->data['month'] ?? Carbon::now()->timezone(config('app.default_timezone'))->format('m');
+        // 获取节日信息
+        $calendar_holidays = CalendarHolidays::where('year', $year)->where('month', $month)->get([
+            'name' => 'name',
+            'year' => 'year',
+            'month' => 'month',
+            'day' => 'day',
+            'is_solar_term' => 'is_solar_term',
+            'is_official_holiday' => 'is_official_holiday'
+        ]);
+        $calendar_holidays_data = [];
+        foreach ($calendar_holidays as $_calendar_holidays) {
+            if (!isset($calendar_holidays_data[intval($_calendar_holidays->day)])) {
+                $calendar_holidays_data[intval($_calendar_holidays->day)] = [];
+            }
+            $color = null;
+            if (is_null($color) && $_calendar_holidays->is_solar_term == CalendarHolidaysEnums\IsSolarTerm::Yes->value) {
+                $color = TodosEnums\Color::SolarTerm->value;
+            }
+            if (is_null($color) && $_calendar_holidays->is_official_holiday == CalendarHolidaysEnums\IsOfficialHoliday::Yes->value) {
+                $color = TodosEnums\Color::Festival->value;
+            }
+            if (is_null($color)) {
+                $color = TodosEnums\Color::MinorFestival->value;
+            }
+            $completed = false;
+            $date = Carbon::create($_calendar_holidays->year, $_calendar_holidays->month, $_calendar_holidays->day)->timezone(config('app.default_timezone'));
+            if ($date->lt(Carbon::today()->timezone(config('app.default_timezone')))) {
+                $completed = true;
+            }
+
+            $calendar_holidays_data[intval($_calendar_holidays->day)][] = [
+                'id' => null,
+                'title' => $_calendar_holidays->name,
+                'color' => $color,
+                'completed' => $completed,
+                'is_solar_term' => $_calendar_holidays->is_solar_term == CalendarHolidaysEnums\IsSolarTerm::Yes->value,
+                'is_official_holiday' => $_calendar_holidays->is_official_holiday == CalendarHolidaysEnums\IsOfficialHoliday::Yes->value
+            ];
+        }
+        // 获取月份的所有事件，不论是否完成
+        $start_at = Carbon::parse($year . '-' . $month . '-1')->timezone(config('app.default_timezone'))->endOfMonth()->endOfDay();
+        $end_at = Carbon::parse($year . '-' . $month . '-1')->timezone(config('app.default_timezone'))->startOfMonth()->startOfDay();
+        $todos = Todos::where('user_id', $request->uid)->where('start_at', '<=', $start_at->timestamp)->where('end_at', '>=', $end_at->timestamp)->get([
+            'id' => 'id',
+            'title' => 'title',
+            'color' => 'color',
+            'start_at' => 'start_at',
+            'end_at' => 'end_at',
+            'completed' => 'completed',
+            'repeat_type' => 'repeat_type',
+            'repeat_interval' => 'repeat_interval',
+            'repeat_until' => 'repeat_until'
+        ]);
+        // 处理数据
+        $date = [];
+        for ($day = 1; $day <= intval($start_at->format('d')); $day++) {
+            $date[$day] = [];
+            if (isset($calendar_holidays_data[$day])) {
+                $date[$day] = $calendar_holidays_data[$day];
+            }
+        }
+        foreach ($todos as $todo) {
+            // 转换为 Carbon 方便比较
+            $todoStart = Carbon::createFromTimestamp($todo['start_at'])->timezone(config('app.default_timezone'))->startOfDay();
+            $todoEnd = Carbon::createFromTimestamp($todo['end_at'])->timezone(config('app.default_timezone'))->endOfDay();
+            for ($day = 1; $day <= intval($start_at->format('d')); $day++) {
+                $currentDate = Carbon::create($year, $month, $day)->timezone(config('app.default_timezone'))->setTime(12, 0);
+                // 如果当天在待办时间范围内
+                if ($currentDate->between($todoStart, $todoEnd)) {
+                    $date[$day][] = [
+                        'id' => $todo->id,
+                        'title' => $todo->title,
+                        'color' => $todo->color,
+                        'completed' => $todo->completed == TodosEnums\Completed::Yes->value,
+                        'is_solar_term' => false,
+                        'is_official_holiday' => false
+                    ];
+                }
+            }
+        }
+        // 返回数据
+        return success($request, [
+            'date' => $date,
+            'month' => $month,
+            'color' => TodosEnums\Color::all()
+        ]);
+    }
 }
