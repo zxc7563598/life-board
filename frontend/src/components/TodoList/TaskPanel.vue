@@ -282,7 +282,6 @@ const todoColor = ref([])
 const todo_complete = ref([])
 const todo_incomplete = ref([])
 function getTodoLists(key) {
-  console.warn('getTodoLists', key)
   if (key === 'divider' || key === 'markInput') {
     return false
   }

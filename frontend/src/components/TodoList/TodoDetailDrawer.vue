@@ -1,6 +1,25 @@
 <template>
   <n-drawer v-model:show="visible" placement="right" width="400" @update:show="handleUpdateShow">
-    <n-drawer-content :title="title">
+    <n-drawer-content>
+      <template #header>
+        <div class="w-full flex items-center justify-center">
+          <div class="flex-1 text-18px font-500">
+            {{ title }}
+          </div>
+          <n-button
+            v-if="props.dataId && !completed" strong secondary round type="success" size="tiny"
+            @click="completeTodo(true, props.dataId)"
+          >
+            标记完成
+          </n-button>
+          <n-button
+            v-if="props.dataId && completed" strong secondary round type="error" size="tiny"
+            @click="completeTodo(false, props.dataId)"
+          >
+            取消完成
+          </n-button>
+        </div>
+      </template>
       <div v-if="loading">
         加载中...
       </div>
@@ -35,10 +54,7 @@
               v-if="date_type === 'single_date'" v-model:value="date_range[0]" type="date"
               class="w-full"
             />
-            <n-date-picker
-              v-if="date_type === 'date_range'" v-model:value="date_range" type="daterange"
-              clearable
-            />
+            <n-date-picker v-if="date_type === 'date_range'" v-model:value="date_range" type="daterange" clearable />
           </n-form-item>
           <n-form-item path="repeat_type" label="重复类型">
             <n-select v-model:value="form.repeat_type" :options="repeat_type_options" />
@@ -69,6 +85,10 @@ import { request } from '@/utils/http/request'
 const props = defineProps({
   modelValue: Boolean,
   dataId: [String, Number],
+  defaultTimestamp: {
+    type: Number,
+    default: null,
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -110,6 +130,7 @@ const date_type_options = ref([
 const date_range = ref([null, null])
 const repeat_type_options = ref([])
 
+// 存储todo
 function saveTodo() {
   const now = new Date()
   form.value.start_at = date_range.value[0]
@@ -163,16 +184,36 @@ function saveTodo() {
   })
 }
 
+// 操作todo完成
+function completeTodo(complete, id) {
+  if (complete) {
+    request.post('/todo/complete-todo', { todo_id: id }).then(({ code }) => {
+      if (code === 0) {
+        window.$message.success('操作成功')
+        handleUpdateShow(false)
+      }
+    })
+  }
+  else {
+    request.post('/todo/uncomplete-todo', { todo_id: id }).then(({ code }) => {
+      if (code === 0) {
+        window.$message.success('操作成功')
+        handleUpdateShow(false)
+      }
+    })
+  }
+}
+
 // 同步外部 v-model 状态
 watch(() => props.modelValue, (val) => {
   visible.value = val
 })
 
 // 监听 visible 和 dataId，拉数据
+const completed = ref(false)
 watch([visible, () => props.dataId], async ([show, id]) => {
-  if (show && id != null) {
+  if (show) {
     loading.value = true
-    // 获取数据
     request.post('/todo/get-todo', { todo_id: id }).then(({ code, data }) => {
       colors.value = []
       category.value = []
@@ -183,48 +224,58 @@ watch([visible, () => props.dataId], async ([show, id]) => {
           value: null,
           label: '无分组',
         })
-        data.categories.forEach((item) => {
+        data?.categories?.forEach((item) => {
           category.value.push({
             value: item.key,
             label: item.value,
           })
         })
-        data.color.forEach((item) => {
+        data?.color?.forEach((item) => {
           colors.value.push({
             value: item.key,
             label: item.color,
           })
         })
-        data.repeat_type.forEach((item) => {
+        data?.repeat_type?.forEach((item) => {
           repeat_type_options.value.push({
             value: item.key,
             label: item.value,
           })
         })
-        data.categories.forEach((item) => {
+        data?.categories?.forEach((item) => {
           categories_options.value.push({
             value: item.key,
             label: item.value,
           })
         })
-        form.value.category_id = data.data.category_id
-        form.value.title = data.data.title
-        form.value.content = data.data.content
-        form.value.color = data.data.color
-        form.value.start_at = data.data.start_at * 1000
-        form.value.end_at = data.data.end_at * 1000
-        form.value.repeat_type = data.data.repeat_type
-        form.value.repeat_interval = data.data.repeat_interval
-        form.value.repeat_until = data.data.repeat_until ? data.data.repeat_until * 1000 : null
-        date_range.value = [form.value.start_at, form.value.end_at]
-        loading.value = false
-        if ((data.data.end_at - data.data.start_at) > 86400) {
-          date_type.value = 'date_range'
+
+        if (data?.data) {
+          completed.value = data.data.completed
+          form.value.category_id = data.data.category_id
+          form.value.title = data.data.title
+          form.value.content = data.data.content
+          form.value.color = data.data.color
+          form.value.start_at = data.data.start_at * 1000
+          form.value.end_at = data.data.end_at * 1000
+          form.value.repeat_type = data.data.repeat_type
+          form.value.repeat_interval = data.data.repeat_interval
+          form.value.repeat_until = data.data.repeat_until ? data.data.repeat_until * 1000 : null
+          date_range.value = [form.value.start_at, form.value.end_at]
+          if ((data.data.end_at - data.data.start_at) > 86400) {
+            date_type.value = 'date_range'
+          }
+          else {
+            date_type.value = 'single_date'
+          }
         }
-        else {
+        else if (props.defaultTimestamp != null) {
+          form.value.start_at = props.defaultTimestamp
+          form.value.end_at = props.defaultTimestamp
+          date_range.value = [props.defaultTimestamp, props.defaultTimestamp]
           date_type.value = 'single_date'
         }
       }
+      loading.value = false
     })
   }
 })
