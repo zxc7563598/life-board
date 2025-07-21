@@ -27,6 +27,9 @@ enum Color: int
     case DeepIndigo = 18; // 深蓝紫
     case DarkRosePink = 19; // 暗玫瑰粉
     case SoftPlumRed = 20; // 柔紫红
+    case SolarTerm = 21; // 节气
+    case Festival = 22; // 节日
+    case MinorFestival = 23; // 小节日
 
     public function label(): string
     {
@@ -51,6 +54,9 @@ enum Color: int
             static::DeepIndigo => trans('Deep Indigo'),
             static::DarkRosePink => trans('Dark Rose Pink'),
             static::SoftPlumRed => trans('Soft Plum Red'),
+            static::SolarTerm => trans('Solar Term'),
+            static::Festival => trans('Festival'),
+            static::MinorFestival => trans('MinorFestival'),
         };
     }
 
@@ -77,6 +83,9 @@ enum Color: int
             static::DeepIndigo => ['light' => '#4f5a95', 'dark' => '#3d4679'], // 深蓝紫
             static::DarkRosePink => ['light' => '#b0708a', 'dark' => '#90586f'], // 暗玫瑰粉
             static::SoftPlumRed => ['light' => '#a35b6d', 'dark' => '#854454'], // 柔紫红
+            static::SolarTerm => ['light' => '#4c9c8d', 'dark' => '#5db0a0'], // 节气
+            static::Festival => ['light' => '#d87c6a', 'dark' => '#de8d7e'], // 节日
+            static::MinorFestival => ['light' => '#a78bc7', 'dark' => '#b49bd8'], // 小节日
         };
     }
 

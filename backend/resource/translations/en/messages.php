@@ -35,6 +35,9 @@ return [
     "Deep Indigo" => "Deep Indigo",
     "Dark Rose Pink" => "Dark Rose Pink",
     "Soft Plum Red" => "Soft Plum Red",
+    "Solar Term" => "Solar Term",
+    "Festival" => "Festival",
+    "MinorFestival" => "MinorFestival",
 
     "success" => "success",
 
