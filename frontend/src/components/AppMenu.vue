@@ -97,6 +97,19 @@ if (!route.meta.hideLayout) {
             RouterLink,
             {
               to: {
+                name: 'TodoCalendarView',
+              },
+            },
+            { default: () => '待办日历' },
+          ),
+          key: 'todo-calendar',
+          icon: () => h('i', { class: 'i-tabler-calendar-event' }),
+        },
+        {
+          label: () => h(
+            RouterLink,
+            {
+              to: {
                 name: 'TodoListView',
               },
             },
