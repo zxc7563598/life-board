@@ -14,6 +14,8 @@ import IncomeExpenseOverview from '@/components/BillAnalytics/IncomeExpenseOverv
 import BillModuleGuide from '@/components/Home/BillModuleGuide.vue'
 import RealTimeClockCard from '@/components/Home/RealTimeClockCard.vue'
 import WelcomeMessage from '@/components/Home/WelcomeMessage.vue'
+import Calendar from '@/components/TodoCalendar/Calendar.vue'
+import TodoCard from '@/components/TodoList/TodoCard.vue'
 import eventBus from '@/utils/event-bus'
 import { request } from '@/utils/http/request'
 
@@ -27,6 +29,8 @@ emit('setDefaultValue', 'home')
 const widgets = ref([])
 
 const widgetMap = {
+  Calendar,
+  TodoCard,
   RealTimeClockCard,
   WelcomeMessage,
   BillModuleGuide,
