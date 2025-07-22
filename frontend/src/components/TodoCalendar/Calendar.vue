@@ -14,7 +14,7 @@
               :color="isDark ? color[item.color].dark : color[item.color].light" class="mt-1 w-full overflow-hidden"
               :class="item.completed ? 'line-through' : ''" @click="openDrawer($event, item.id)"
             >
-              {{ item.title }}
+              <n-ellipsis>{{ item.title }}</n-ellipsis>
             </n-button>
           </div>
         </n-calendar>
