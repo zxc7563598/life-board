@@ -62,7 +62,7 @@ class User extends Model
             UserDashboardWidgets::insert([
                 [
                     'user_id' => $model->id,
-                    'widget_id' => 6,
+                    'widget_id' => 2,
                     'order_index' => 1,
                     'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
                     'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
@@ -78,8 +78,56 @@ class User extends Model
                 ],
                 [
                     'user_id' => $model->id,
-                    'widget_id' => 2,
+                    'widget_id' => 10,
                     'order_index' => 3,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ],
+                [
+                    'user_id' => $model->id,
+                    'widget_id' => 7,
+                    'order_index' => 4,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ],
+                [
+                    'user_id' => $model->id,
+                    'widget_id' => 8,
+                    'order_index' => 5,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ],
+                [
+                    'user_id' => $model->id,
+                    'widget_id' => 9,
+                    'order_index' => 6,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ],
+                [
+                    'user_id' => $model->id,
+                    'widget_id' => 5,
+                    'order_index' => 7,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ],
+                [
+                    'user_id' => $model->id,
+                    'widget_id' => 3,
+                    'order_index' => 8,
+                    'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
+                    'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
+                    'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
+                ],
+                [
+                    'user_id' => $model->id,
+                    'widget_id' => 4,
+                    'order_index' => 9,
                     'is_active' => UserDashboardWidgetsEnums\IsActive::Enable->value,
                     'created_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp,
                     'updated_at' => Carbon::now()->timezone(config('app.default_timezone'))->timestamp
