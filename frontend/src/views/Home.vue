@@ -14,6 +14,7 @@ import IncomeExpenseOverview from '@/components/BillAnalytics/IncomeExpenseOverv
 import BillModuleGuide from '@/components/Home/BillModuleGuide.vue'
 import NowNews from '@/components/Home/NowNews.vue'
 import RealTimeClockCard from '@/components/Home/RealTimeClockCard.vue'
+import SearchCard from '@/components/Home/SearchCard.vue'
 import WelcomeMessage from '@/components/Home/WelcomeMessage.vue'
 import Calendar from '@/components/TodoCalendar/Calendar.vue'
 import TodoCard from '@/components/TodoList/TodoCard.vue'
@@ -30,6 +31,7 @@ emit('setDefaultValue', 'home')
 const widgets = ref([])
 
 const widgetMap = {
+  SearchCard,
   NowNews,
   Calendar,
   TodoCard,
