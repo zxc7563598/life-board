@@ -15,7 +15,7 @@ LifeBoard 聚焦于三大核心方向：
 
 可以把 **LifeBoard** 想象成一个个人生活的“控制中心”。它结合了 Notion、Obsidian、Todoist 等工具的优点，又提供完整的数据所有权和隐私保护。
 
-**本项目已经经由 Zread 解析完成，如果需要快速了解项目，可以点击次数进行查看：[了解本项目](https://zread.ai/zxc7563598/life-board)**
+**本项目已经经由 Zread 解析完成，如果需要快速了解项目，可以点击此处进行查看：[了解本项目](https://zread.ai/zxc7563598/life-board)**
 
 ---
 

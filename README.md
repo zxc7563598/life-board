@@ -15,7 +15,7 @@ LifeBoard focuses on three core directions:
 
 You can think of **LifeBoard** as a "control center" for personal life. It combines the advantages of tools such as Notion, Obsidian, and Todoist, while also providing complete data ownership and privacy protection.
 
-**This project has been parsed by Zread. If you need a quick overview of the project, you can click on the number of views to view it：[Understand this project](https://zread.ai/zxc7563598/life-board)**
+**This project has been parsed by Zread. If you need a quick overview of the project, you can click here to view it：[Understand this project](https://zread.ai/zxc7563598/life-board)**
 
 ---
 
