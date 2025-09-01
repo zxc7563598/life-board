@@ -179,7 +179,7 @@ class Task
         foreach ($uids as $uid) {
             $htmlBody = imap_fetchbody($inbox, $uid, '2', FT_UID);
             $htmlDecoded = base64_decode($htmlBody);
-            if (preg_match('#https://download\.bill\.weixin\.qq\.com/cgi-bin/download_bill\.cgi\?[^"\']+#', $htmlDecoded, $matches)) {
+            if (preg_match('#https://tenpay\.wechatpay\.cn/userroll/userbilldownload/downloadfilefromemail\?[^"\']+#', $htmlDecoded, $matches)) {
                 $url = html_entity_decode($matches[0]);
                 $ch = curl_init($url);
                 curl_setopt_array($ch, [
