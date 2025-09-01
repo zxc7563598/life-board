@@ -40,7 +40,7 @@
     "revolt/event-loop": "^1.0",
     "hejunjie/error-log": "^1.0",
     "hejunjie/ip138": "^1.0",
-    "hejunjie/wechat-bill-parser": "^1.0",
+    "hejunjie/wechat-bill-parser": "^2.0",
     "hejunjie/alipay-bill-parser": "^1.0",
     "workerman/crontab": "^1.0"
   },
