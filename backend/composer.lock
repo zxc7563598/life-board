@@ -1175,16 +1175,16 @@
         },
         {
             "name": "hejunjie/alipay-bill-parser",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zxc7563598/php-alipay-bill-parser.git",
-                "reference": "d999b087343086b3c08051bc3b533294e850bf65"
+                "reference": "df1b56629735fe05d1997525600e901acf4a5f54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zxc7563598/php-alipay-bill-parser/zipball/d999b087343086b3c08051bc3b533294e850bf65",
-                "reference": "d999b087343086b3c08051bc3b533294e850bf65",
+                "url": "https://api.github.com/repos/zxc7563598/php-alipay-bill-parser/zipball/df1b56629735fe05d1997525600e901acf4a5f54",
+                "reference": "df1b56629735fe05d1997525600e901acf4a5f54",
                 "shasum": ""
             },
             "require": {
@@ -1209,9 +1209,9 @@
             "description": "一个高性能、自动化的支付宝账单解析器，支持压缩包密码自动破解与账单数据智能提取，适用于账单分析、账单自动化入账、个人理财工具开发等场景 | A fast, automated Alipay bill parser that cracks compressed file passwords and extracts bill data. Perfect for bill analysis, automatic bookkeeping, and personal finance tools",
             "support": {
                 "issues": "https://github.com/zxc7563598/php-alipay-bill-parser/issues",
-                "source": "https://github.com/zxc7563598/php-alipay-bill-parser/tree/v1.0.0"
+                "source": "https://github.com/zxc7563598/php-alipay-bill-parser/tree/v1.0.1"
             },
-            "time": "2025-05-26T10:56:24+00:00"
+            "time": "2025-08-01T11:22:06+00:00"
         },
         {
             "name": "hejunjie/error-log",
